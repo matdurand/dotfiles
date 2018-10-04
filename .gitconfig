@@ -1,0 +1,44 @@
+[credential]
+	helper = osxkeychain
+[alias]
+  a = add
+  s = status -s
+  ca = commit -a
+  cm = commit --amend --no-edit
+  co = checkout
+  rea = rebase --abort
+  rec = rebase --continue
+  ls = log --oneline --decorate
+  lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
+  ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
+  delete-merged-branches = "!git co master && git branch --no-color --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+  allbr = branch -a
+  branch-name = "!git rev-parse --abbrev-ref HEAD"
+  set-upstream = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
+  undo-commit = reset --soft HEAD^
+  # Push the current branch to the remote "origin", and set it to track
+  # the upstream branch
+  publish = "!git push -u origin $(git branch-name)"
+  fpush = "!git push -f origin $(git branch-name)"
+
+[core]
+	editor = code --wait
+[diff]
+  tool = wstorm
+[difftool]
+  prompt = false
+[difftool.wstorm]
+  cmd = /usr/local/bin/wstorm diff "$LOCAL" "$REMOTE" && read
+  trustExitCode = true
+[merge]
+  tool = wstorm
+[mergetool.wstorm]
+  cmd = /usr/local/bin/wstorm merge "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+[commit]
+	template = ~/.gitmessage
+[difftool "sourcetree"]
+	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --nosplash \"$LOCAL\" \"$REMOTE\"
+	path =
+[mergetool "sourcetree"]
+	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
+	trustExitCode = true
