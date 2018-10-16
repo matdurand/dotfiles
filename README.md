@@ -25,7 +25,9 @@ and add some `EXPORT var=value`. Each line will be added to the `.zprofile` file
 
 If you want to add variables after the installation, just add them manually to `.zprofile` file. Be sure to copy them to the `.additional-variables` file to make sure they are not overwritten on your next install.
 
-## Color theme
+## iTerm2
 
 If you are using iTerm2, you need to import the color theme. To do so, go to iTerm2 preferences > Profiles > Colors.
 In the dropdown in the bottom right corner, import and select `iterm2/mathieu-iterm2-colors.itermcolors`.
+
+You also need to change the font in iTerm2 preferences > Profiles > Text. Click on change font and select Menlo for Powerline

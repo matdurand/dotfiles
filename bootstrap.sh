@@ -23,6 +23,7 @@ function setup() {
   #Change shell
   echo "Changing your shell to ZSH"
   chsh -s /bin/zsh
+  sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
 
   zsh -c "source ~/.zshrc && echo Zplug Installed" &
   wait $!
