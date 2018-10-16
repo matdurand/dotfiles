@@ -8,10 +8,6 @@ export NVM_DIR="$HOME/.nvm"
 # =============================================================================
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
-# AWS
-export DEFAULT_USER=`whoami`
-export AWS_PROFILE=koordinator
-export AWS_EB_PROFILE=koordinator
 
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border --inline-info --color=dark,bg+:235,hl+:10,pointer:5'
 
@@ -38,14 +34,6 @@ zplug "sorin-ionescu/prezto", \
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
-
-#install https://github.com/belak/prezto-contrib#usage
-
-# zsh directory history plugin (not installable with zplug)
-source /Users/mathieudurand/sources/github.com/tymm/zsh-directory-history/directory-history.plugin.zsh
-# Bind up/down arrow keys to navigate through your history
-bindkey '\e[A' directory-history-search-backward
-bindkey '\e[B' directory-history-search-forward
 
 # Miscellaneous commands
 # peco is grep on steriod
@@ -107,22 +95,10 @@ setopt hist_ignore_space        # Ignore commands that start with space.
 
 # Common CTRL bindings.
 bindkey "^a" beginning-of-line
-bindkey "^e" end-of-line
-bindkey "^f" forward-word
-bindkey "^b" backward-word
+bindkey "^d" end-of-line
 bindkey "^k" kill-line
-bindkey "^d" delete-char
 bindkey "^y" accept-and-hold
 bindkey "^w" backward-kill-word
-bindkey "^u" backward-kill-line
-#bindkey "^R" history-incremental-pattern-search-backward
-#bindkey "^F" history-incremental-pattern-search-forward
-
-# Do not require a space when attempting to tab-complete.
-bindkey "^i" expand-or-complete-prefix
-
-# Fixes for alt-backspace and arrows keys
-bindkey '^[^?' backward-kill-word
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
 
@@ -131,17 +107,13 @@ bindkey "^[[1;5D" backward-word
 # =============================================================================
 
 # Install plugins if there are plugins that have not been installed
-if ! zplug check; then
-    printf "Install plugins? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+if [[ ! -d ~/.zplug/repos/sorin-ionescu/prezto ]]; then
+  zplug install
 fi
 
 if zplug check "zsh-users/zsh-history-substring-search"; then
-	#the two escape sequences(a and b) are defined in iTerm keys as Shift+UP and Shift+DOWN
-  bindkey "^[a" history-substring-search-up
-	bindkey "^[b" history-substring-search-down
+  bindkey '\e[A' history-substring-search-up
+  bindkey '\e[B' history-substring-search-down
 fi
 
 if zplug check "b4b4r07/enhancd"; then
@@ -156,3 +128,5 @@ fi
 zplug load
 
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
+
+

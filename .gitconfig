@@ -8,7 +8,11 @@
   co = checkout
   rea = rebase --abort
   rec = rebase --continue
-  ls = log --oneline --decorate
+  recent-branches = "!git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -n 100"
+  #switch branches
+  switch = "!git checkout $(git recent-branches | fzf)"
+  wip = "!git add --all . && git commit -m 'WIP'"
+  ls = "!git log --oneline --decorate | fzf"
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
   ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
   delete-merged-branches = "!git co master && git branch --no-color --merged | grep -v '\\*' | xargs -n 1 git branch -d"
@@ -20,6 +24,7 @@
   # the upstream branch
   publish = "!git push -u origin $(git branch-name)"
   fpush = "!git push -f origin $(git branch-name)"
+  addf = "!git add $(git ls-files -m --others --exclude-standard | fzf -m)"
 
 [core]
 	editor = code --wait

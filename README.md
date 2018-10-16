@@ -6,7 +6,7 @@
 
 ### Using Git and the bootstrap script
 
-You can clone the repository wherever you want. (I like to keep it in `~/Projects/dotfiles`, with `~/dotfiles` as a symlink.) The bootstrapper script will pull in the latest version and copy the files to your home folder.
+You can clone the repository wherever you want. The bootstrapper script will pull in the latest version and copy the files to your home folder.
 
 ```bash
 git clone https://github.com/matdurand/dotfiles.git && cd dotfiles && source bootstrap.sh
@@ -18,27 +18,14 @@ To update, `cd` into your local `dotfiles` repository and then:
 source bootstrap.sh
 ```
 
-Alternatively, to update while avoiding the confirmation prompt:
+### Set additional variables
 
-```bash
-set -- -f; source bootstrap.sh
-```
+There is two way to add new variables. The first one is before launching bootstrap.sh. Create a file named `.additional-variables`
+and add some `EXPORT var=value`. Each line will be added to the `.zprofile` file.
 
-### Add custom commands without creating a new fork
+If you want to add variables after the installation, just add them manually to `.zprofile` file. Be sure to copy them to the `.additional-variables` file to make sure they are not overwritten on your next install.
 
-If `~/.extra` exists, it will be sourced along with the other files. You can use this to add a few custom commands without the need to fork this entire repository, or to add commands you don’t want to commit to a public repository.
+## Color theme
 
-My `~/.extra` looks something like this:
-
-```bash
-# Git credentials
-# Not in the repository, to prevent people from accidentally committing under my name
-GIT_AUTHOR_NAME="Mathieu Durand"
-GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
-git config --global user.name "$GIT_AUTHOR_NAME"
-GIT_AUTHOR_EMAIL="mathias@mailinator.com"
-GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
-git config --global user.email "$GIT_AUTHOR_EMAIL"
-```
-
-You could also use `~/.extra` to override settings, functions and aliases from my dotfiles repository. It’s probably better to [fork this repository](https://github.com/mathiasbynens/dotfiles/fork) instead, though.
+If you are using iTerm2, you need to import the color theme. To do so, go to iTerm2 preferences > Profiles > Colors.
+In the dropdown in the bottom right corner, import and select `iterm2/mathieu-iterm2-colors.itermcolors`.
