@@ -15,6 +15,7 @@ function setup() {
 		--exclude "*.sh" \
     --exclude "scripts" \
 		--exclude "prezto" \
+    --exclude "screenshots" \
     --exclude "README.md" \
 		--exclude "LICENSE" \
 		-avh --no-perms . ~;
