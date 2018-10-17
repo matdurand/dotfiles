@@ -8,23 +8,27 @@
   co = checkout
   rea = rebase --abort
   rec = rebase --continue
-  recent-branches = "!git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -n 100"
   #switch branches
   switch = "!git checkout $(git recent-branches | fzf)"
-  wip = "!git add --all . && git commit -m 'WIP'"
+  wip = "!git add --all :/ && git commit -m 'WIP'"
   ls = "!git log --oneline --decorate | fzf"
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
   ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
   delete-merged-branches = "!git co master && git branch --no-color --merged | grep -v '\\*' | xargs -n 1 git branch -d"
   allbr = branch -a
-  branch-name = "!git rev-parse --abbrev-ref HEAD"
   set-upstream = !git branch --set-upstream-to=origin/`git symbolic-ref --short HEAD`
   undo-commit = reset --soft HEAD^
+  # checkout a new branch
+  nb = checkout -b
   # Push the current branch to the remote "origin", and set it to track
   # the upstream branch
   publish = "!git push -u origin $(git branch-name)"
   fpush = "!git push -f origin $(git branch-name)"
   addf = "!git add $(git ls-files -m --others --exclude-standard | fzf -m)"
+
+  #intermediary aliases
+  recent-branches = "!git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -n 100"
+  branch-name = "!git rev-parse --abbrev-ref HEAD"
 
 [core]
 	editor = code --wait
