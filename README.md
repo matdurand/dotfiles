@@ -61,7 +61,6 @@ Here is a short list of the different plugins installed and how to use them.
 
 - `k` is an git enhanced version of `ls`
 - many aliases:
-
   - `git addf`: add individual files to the index (use TAB to select the files) ![Preview git addf](/screenshots/gitaddf.png?raw=true)
   - `git switch`: show the list of recent branches to switch to
   - `git publish`: push the current branch to a branch with the same name on origin
@@ -76,8 +75,14 @@ Here is a short list of the different plugins installed and how to use them.
   - `git rea`: abort rebase
   - `git rec`: continue rebase
   - `git delete-merged-branches`: Delete merged branches. **THIS IS POTENTIALLY DANGEROUS. BRANCHES MERGED BUT WITH LATER COMMIT MIGHT BE DELETED**
+  - `git lgp`: an interactive git history using fzf, with preview ![Preview git lgp](/screenshots/gitlog.png?raw=true)
+- the default diff has been replaced with diff-so-fancy, providing a better experience
 
 ### Other
 
 - `peco` is like grep but with interactive filtering capabilities
 - `fzf` is a selection tool. You can pipe lines to it and it will allow you to select some
+- `ncdu` is a better version of `du` to find out how big is a folder and sub-folder
+- `htop` is a better version of top
+- `bat` is a better version of `cat`. An alias is done to use `bat` when typing `cat`
+- `direnv` is not a command, but an automatic process. If you enter a folder with a `.envrc` file, the variable in the file are automatically exposed. When you leave the folder, they are removed
