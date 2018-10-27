@@ -1,15 +1,10 @@
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # =============================================================================
 #                                   Variables
 # =============================================================================
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
-export FZF_DEFAULT_OPTS='--height 40% --reverse --border --inline-info --color=dark,bg+:235,hl+:10,pointer:5'
+export FZF_DEFAULT_OPTS='--height 40% --reverse --border --inline-info --color=dark,fg+:214,bg+:235,hl+:10,pointer:214'
 
 # =============================================================================
 #                                   Plugins
@@ -67,6 +62,8 @@ fi
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 #zplug "zsh-users/zsh-history-substring-search", defer:3
+zplug "sharkdp/bat", as:command, from:gh-r, rename-to:bat
+zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
 
 # =============================================================================
 #                                   Options
@@ -88,6 +85,7 @@ setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
 setopt hist_reduce_blanks       # Remove superfluous blanks.
 setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
 setopt hist_ignore_space        # Ignore commands that start with space.
+unsetopt CORRECT                # Disable prezto utility module auto correct feature
 
 # =============================================================================
 #                                Key Bindings
@@ -101,6 +99,14 @@ bindkey "^y" accept-and-hold
 bindkey "^w" backward-kill-word
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
+
+# =============================================================================
+#                                   Aliases
+# =============================================================================
+if (( $+commands[bat] )); then alias cat='bat'; fi
+if (( $+commands[htop] )); then alias top='htop'; fi
+if (( $+commands[ncdu] )); then alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"; fi
+if (( $+commands[direnv] )); then eval "$(direnv hook zsh)"; fi
 
 # =============================================================================
 #                                   Startup
@@ -129,4 +135,28 @@ zplug load
 
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
+precmd() {
+ # sets the tab title to current dir
+ echo -ne "\e]1;${PWD##*/}\a"
+}
 
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Custom git aliases
+# For some reason, this alias cannot be oput in gitconfig
+fzfgithistory() {
+  git log --graph --format='%C(auto)%h%d %s %C(white)%C(bold)%cr' --color=always "$@" | fzf --ansi --reverse --tiebreak=index --no-sort --bind=ctrl-s:toggle-sort --preview 'f() { set -- $(echo -- "$@" | grep -o "[a-f0-9]\{7\}"); [ $# -eq 0 ] || git show --color=always $1; }; f {}'
+}
+git() {
+  case $1 in
+    lgp)
+      fzfgithistory
+      ;;
+    *)
+      command git "$@"
+      ;;
+  esac
+}

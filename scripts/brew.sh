@@ -22,3 +22,8 @@ brew cask install font-hack-nerd-font
 
 brew tap homebrew/cask-fonts 
 brew cask install font-menlo-for-powerline
+
+brew install htop
+brew install diff-so-fancy
+brew install ncdu
+brew install direnv
