@@ -27,3 +27,4 @@ brew install htop
 brew install diff-so-fancy
 brew install ncdu
 brew install direnv
+brew install httpie
