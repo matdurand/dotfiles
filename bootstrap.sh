@@ -31,7 +31,6 @@ function setup() {
 
   source ./scripts/prezto-install.sh
   source ./scripts/gitsetup.sh
-  source ./scripts/variables.sh
 }
 
 function readVariables() {

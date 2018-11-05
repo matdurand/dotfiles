@@ -20,12 +20,14 @@ To update, `cd` into your local `dotfiles` repository and then:
 source bootstrap.sh
 ```
 
-### Set additional variables
+### Extend this repo
 
-There is two way to add new variables. The first one is before launching bootstrap.sh. Create a file named `.additional-variables`
-and add some `EXPORT var=value`. Each line will be added to the `.zprofile` file.
+You have two way to extend this repo. The first is to fork it and change it to your own liking, but after forking, it will be difficult to apply new updates that I may provide.
 
-If you want to add variables after the installation, just add them manually to `.zprofile` file. Be sure to copy them to the `.additional-variables` file to make sure they are not overwritten on your next install.
+The second way, if you are OK with the current setup but want to apply additional configuration, is to create extension files in your home folder.
+
+If a `~/.zshrc-before` exists, it will be sourced at the beginning of the `.zshrc` file.
+If a `~/.zshrc-after` exists, it will be sourced at the end of the `.zshrc` file.
 
 ### iTerm2
 

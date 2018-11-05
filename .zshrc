@@ -1,4 +1,9 @@
 # =============================================================================
+# Provide extension point to run BEFORE the template zshrc
+# =============================================================================
+[ -s '$HOME/.zshrc-before' ] && source ~/.zshrc-before
+
+# =============================================================================
 #                                   Variables
 # =============================================================================
 export LANG="en_US.UTF-8"
@@ -135,6 +140,8 @@ zplug load
 
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
 precmd() {
  # sets the tab title to current dir
  echo -ne "\e]1;${PWD##*/}\a"
@@ -160,3 +167,8 @@ git() {
       ;;
   esac
 }
+
+# =============================================================================
+# Provide extension point to run AFTER the template zshrc
+# =============================================================================
+[ -s "$HOME/.zshrc-after" ] && source ~/.zshrc-after
