@@ -28,3 +28,4 @@ brew install diff-so-fancy
 brew install ncdu
 brew install direnv
 brew install httpie
+brew install tree
