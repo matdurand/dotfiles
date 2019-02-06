@@ -108,7 +108,6 @@ bindkey "^[[1;5D" backward-word
 # =============================================================================
 #                                   Aliases
 # =============================================================================
-if (( $+commands[bat] )); then alias cat='bat'; fi
 if (( $+commands[htop] )); then alias top='htop'; fi
 if (( $+commands[ncdu] )); then alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"; fi
 if (( $+commands[direnv] )); then eval "$(direnv hook zsh)"; fi
@@ -142,11 +141,6 @@ zplug load
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-precmd() {
- # sets the tab title to current dir
- echo -ne "\e]1;${PWD##*/}\a"
-}
-
 # NVM
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -166,6 +160,29 @@ git() {
       command git "$@"
       ;;
   esac
+}
+
+# Generic find function to locate the first match going up in the folder hierarchy
+function upfind() {
+  dir=`pwd`
+  while [ "$dir" != "/" ]; do
+    p=`find "$dir" -maxdepth 1 -name $1`
+    if [ ! -z $p ]; then
+      echo "$p"
+      return
+    fi
+    dir=`dirname "$dir"`
+  done
+}
+
+# Invoke Gradle wrapper
+function gw() {
+  GW="$(upfind gradlew)"
+  if [ -z "$GW" ]; then
+    echo "Gradle wrapper not found."
+  else
+    $GW $@
+  fi
 }
 
 # =============================================================================

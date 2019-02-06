@@ -29,3 +29,8 @@ brew install ncdu
 brew install direnv
 brew install httpie
 brew install tree
+
+#https://dev.to/_darrenburns/10-tools-to-power-up-your-command-line-4id4?utm_source=Newsletter+Subscribers&utm_campaign=d83390372e-EMAIL_CAMPAIGN_2019_01_07_06_59&utm_medium=email&utm_term=0_d8f11d5d1e-d83390372e-154749685
+brew install fd
+brew install ripgrep
+brew install exa
