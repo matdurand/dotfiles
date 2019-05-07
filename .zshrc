@@ -1,7 +1,7 @@
 # =============================================================================
 # Provide extension point to run BEFORE the template zshrc
 # =============================================================================
-[ -s '$HOME/.zshrc-before' ] && source ~/.zshrc-before
+[ -s "$HOME/.zshrc-before" ] && source ~/.zshrc-before
 
 # =============================================================================
 #                                   Variables
