@@ -8,4 +8,6 @@ ln -sf ~/.zprezto/runcoms/zshenv ~/.zshenv
 rm -f ~/.zpreztorc
 cp -f ./prezto/zpreztorc ~/.zpreztorc
 
-zsh -c "$(curl -fsSL https://raw.githubusercontent.com/el1t/statusline/master/prezto/install)"
+(cd ~/.zprezto && git clone --recurse-submodules https://github.com/belak/prezto-contrib contrib)
+
+#zsh -c "$(curl -fsSL https://raw.githubusercontent.com/el1t/statusline/master/prezto/install)"

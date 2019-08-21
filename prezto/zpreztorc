@@ -12,6 +12,7 @@ zstyle ':prezto:load' pmodule \
   'spectrum' \
   'utility' \
   'completion' \
+  'contrib-prompt' \
   'prompt' \
   'ssh' \
   'homebrew' \
@@ -35,10 +36,4 @@ zstyle ':prezto:module:editor' key-bindings 'emacs'
 # Prompt
 #
 
-# Set the prompt theme to load.
-# Setting it to 'random' loads a random theme.
-# Auto set to 'off' on dumb terminals.
-
-### the sorin prompt is temporary. we just want the prompt to work when we first boot zsh
-### later, in the dotfiles installation, we install the statusLine prompt that will replace this line
-zstyle ':prezto:module:prompt' theme 'statusline' -d
+zstyle ':prezto:module:prompt' theme 'spaceship' -d
