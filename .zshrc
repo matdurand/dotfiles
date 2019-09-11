@@ -23,7 +23,7 @@ source ~/.zplug/init.zsh
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # Spaceship theme
-# zplug denysdovhan/spaceship-prompt, use:spaceship.zsh, from:github, as:theme
+zplug denysdovhan/spaceship-prompt, use:spaceship.zsh, from:github, as:theme
 
 # Prezto framework
 zplug "sorin-ionescu/prezto", \
@@ -184,6 +184,18 @@ function gw() {
     $GW $@
   fi
 }
+
+# sets the tab title to current dir
+precmd() {
+  echo -ne "\e]1;${PWD##*/}\a"
+}
+
+# Prompt config
+SPACESHIP_TIME_SHOW=true
+SPACESHIP_PROMPT_ORDER=(dir git docker exec_time  line_sep exit_code char)
+SPACESHIP_RPROMPT_ORDER=(kubecontext node package time)
+SPACESHIP_DIR_TRUNC=0
+SPACESHIP_DIR_TRUNC_REPO=false
 
 # =============================================================================
 # Provide extension point to run AFTER the template zshrc
