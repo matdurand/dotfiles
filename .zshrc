@@ -112,6 +112,9 @@ bindkey "^[[1;5D" backward-word
 if (( $+commands[htop] )); then alias top='htop'; fi
 if (( $+commands[ncdu] )); then alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"; fi
 if (( $+commands[direnv] )); then eval "$(direnv hook zsh)"; fi
+if [ "$(uname 2> /dev/null)" = "Linux" ]; then
+    alias open='xdg-open'
+fi
 
 # =============================================================================
 #                                   Startup
