@@ -69,6 +69,7 @@ zplug "zsh-users/zsh-autosuggestions"
 #zplug "zsh-users/zsh-history-substring-search", defer:3
 zplug "sharkdp/bat", as:command, from:gh-r, rename-to:bat
 zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
+zplug "agkozak/zsh-z"
 
 # =============================================================================
 #                                   Options
