@@ -189,6 +189,18 @@ function gw() {
   fi
 }
 
+# Open a pull request on the current branch
+gpr() {
+  if [ $? -eq 0 ]; then
+    github_url=`git remote -v | awk '/fetch/{print $2}' | sed -Ee 's#(git@|git://)#http://#' -e 's@com:@com/@' -e 's%\.git$%%'`;
+    branch_name=`git symbolic-ref --short HEAD`;
+    pr_url=$github_url"/compare/master..."$branch_name
+    open $pr_url;
+  else
+    echo 'failed to open a pull request.';
+  fi
+}
+
 # sets the tab title to current dir
 precmd() {
   echo -ne "\e]1;${PWD##*/}\a"
