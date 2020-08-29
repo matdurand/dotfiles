@@ -34,6 +34,10 @@ else
   sudo apt-get install zsh fonts-firacode htop ripgrep fd-find libz-dev bashtop vim emacs rename ulauncher httpie ncdu xclip xsel
   sudo apt-get install build-essential curl file git ttf-mscorefonts-installer libaio1 jq
 
+  #Installing auto-cpufreq for power management
+  sudo snap install auto-cpufreq
+  sudo auto-cpufreq --install
+
   #Installing Rust-Cargo
   curl https://sh.rustup.rs -sSf | sh
   ##Rust packages
