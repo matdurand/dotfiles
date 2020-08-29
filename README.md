@@ -1,67 +1,91 @@
-# Mathieu's dotfiles
+#Mathieu's dotfiles
 
-![Preview](/screenshots/iterm2.png?raw=true)
+![Preview](/dotfiles_screenshots/iterm2.png?raw=true)
+(iTerm preview on OSX)
 
-## Installation
+# Bare git repo
 
-### Using Git and the bootstrap script
+This is a repo to store my dotfiles. It's configured as a bare git repo.
+*** DO NOT CLONE THIS DIRECTLY USING A STANDARD GIT CLONE ***
 
-You can clone the repository wherever you want. The bootstrapper script will pull in the latest version and copy the files to your home folder.
+The creation of the bare repo was done as follow:
 
-```bash
-git clone https://github.com/matdurand/dotfiles.git && cd dotfiles && source bootstrap.sh
+```zsh
+mkdir $HOME/dotfiles
+git init --bare $HOME/dotfiles
+alias config='git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+config config --local status.showUntrackedFiles no
 ```
 
-To update, `cd` into your local `dotfiles` repository and then:
-
-```bash
-source bootstrap.sh
+On an existing system, to clone this, you would do
+```zsh
+git clone --bare git@github.com:matdurand/dotfiles.git ~/dotfiles
+alias config='git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
+config config --local status.showUntrackedFiles no
 ```
 
-### Extend this repo
+The alias is added to the .zshrc.
 
-You have two way to extend this repo. The first is to fork it and change it to your own liking, but after forking, it will be difficult to apply new updates that I may provide.
+## Basic usage, to add a dotfileto the repo and commit:
 
-The second way, if you are OK with the current setup but want to apply additional configuration, is to create extension files in your home folder.
+```
+config add /path/to/file
+config commit -m "A short message"
+config push
+```
 
-If a `~/.zshrc-before` exists, it will be sourced at the beginning of the `.zshrc` file.
-If a `~/.zshrc-after` exists, it will be sourced at the end of the `.zshrc` file.
+Using the `config` alias is like using git, but it uses the bare git repo created earlier. The config command allows to add any file to the git repo for safe keeping. Since the repo is basically the home directory, you can edit in place and use the `config` command to add the changes to the git repo.
 
-### iTerm2
+
+# The installation scripts
+
+The `dotfiles_installer` folder contains some installation scripts.
+
+* /dotfiles_installer/install-dependencies.sh: Install some dependencies using brew on OSX or APT on Ubuntu
+* /dotfiles_installer/configure-git.sh: Set the username and email for git
+* /dotfiles_installer/install-prezto.sh: Perform the installation and setup for prezto
+
+# Cleanup
+
+To clean, perform `rm -rf ~/.zplug`, which will remove the zplug dependencies.
+
+You will have to remove the dependencies manually.
+
+# OSX - iTerm2
 
 If you are using iTerm2, you need to import the color theme. To do so, go to iTerm2 preferences > Profiles > Colors.
 In the dropdown in the bottom right corner, import and select `iterm2/mathieu-iterm2-colors.itermcolors`.
 
 You also need to change the font in iTerm2 preferences > Profiles > Text. Click on change font and select Menlo for Powerline
 
-## Highlights
+# Highlights
 
 Here is a short list of the different plugins installed and how to use them.
 
-### Search
+## Search
 
-- CTRL+R allows you to search in the command history ![Preview search history](/screenshots/searchhistory.png?raw=true)
-- CTRL+T allows you to search for a file in the current directory (or sub-directories) ![Preview search history](/screenshots/searchfiles.png?raw=true)
+- CTRL+R allows you to search in the command history ![Preview search history](/dotfiles_screenshots/searchhistory.png?raw=true)
+- CTRL+T allows you to search for a file in the current directory (or sub-directories) ![Preview search history](/dotfiles_screenshots/searchfiles.png?raw=true)
 
-### Navigation
+## Navigation
 
 - `bd [n]` allows you to go up a number of directory. This is equivalent to doing N times `cd ..`
-- `cd ...` will show you a list of all the parent folder. If you select one, it will move you in this directory ![Preview cd back](/screenshots/cdback.png?raw=true)
+- `cd ...` will show you a list of all the parent folder. If you select one, it will move you in this directory ![Preview cd back](/dotfiles_screenshots/cdback.png?raw=true)
 - [folder name], instead of tying `cd folder` you can just type the folder name to navigate into it
 - `bookmark [name]` will create a bookmark in the current folder
 - `jump [name]` will move you to the folder matching the bookmark `name`
 
-### Clipboard
+## Clipboard
 
 - `copydir` will copy the path of the current directory in the clipboard
 - `copyfile [file]` will copy the content of `file` into the clipboard
-- `[command] | clipboard` will pipe the command result into the clipboard
+- `[command] | clipboard` will pipe the command result into the clipboard (osx only)
 
-### Git
+## Git
 
 - `k` is an git enhanced version of `ls`
 - many aliases:
-  - `git addf`: add individual files to the index (use TAB to select the files) ![Preview git addf](/screenshots/gitaddf.png?raw=true)
+  - `git addf`: add individual files to the index (use TAB to select the files) ![Preview git addf](/dotfiles_screenshots/gitaddf.png?raw=true)
   - `git switch`: show the list of recent branches to switch to
   - `git publish`: push the current branch to a branch with the same name on origin
   - `git fpush`: like `publish` but as force push
@@ -75,10 +99,10 @@ Here is a short list of the different plugins installed and how to use them.
   - `git rea`: abort rebase
   - `git rec`: continue rebase
   - `git delete-merged-branches`: Delete merged branches. **THIS IS POTENTIALLY DANGEROUS. BRANCHES MERGED BUT WITH LATER COMMIT MIGHT BE DELETED**
-  - `git lgp`: an interactive git history using fzf, with preview ![Preview git lgp](/screenshots/gitlog.png?raw=true)
+  - `git lgp`: an interactive git history using fzf, with preview ![Preview git lgp](/dotfiles_screenshots/gitlog.png?raw=true)
 - the default diff has been replaced with diff-so-fancy, providing a better experience
 
-### Other
+## Other
 
 - `peco` is like grep but with interactive filtering capabilities
 - `fzf` is a selection tool. You can pipe lines to it and it will allow you to select some

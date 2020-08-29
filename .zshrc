@@ -22,9 +22,6 @@ source ~/.zplug/init.zsh
 # zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-# Spaceship theme
-zplug denysdovhan/spaceship-prompt, use:spaceship.zsh, from:github, as:theme
-
 # Prezto framework
 zplug "sorin-ionescu/prezto", \
   use:"init.zsh", \
@@ -69,7 +66,11 @@ zplug "zsh-users/zsh-autosuggestions"
 #zplug "zsh-users/zsh-history-substring-search", defer:3
 zplug "sharkdp/bat", as:command, from:gh-r, rename-to:bat
 zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
+
 zplug "agkozak/zsh-z"
+
+# Starship prompt
+if (( $+commands[starship] )); then eval "$(starship init zsh)"; fi
 
 # =============================================================================
 #                                   Options
@@ -77,7 +78,7 @@ zplug "agkozak/zsh-z"
 
 # History
 HISTFILE=~/.zsh_history
-HISTSIZE=10000
+HISTSIZE=20000
 SAVEHIST=$HISTSIZE
 
 setopt autocd                   # Allow changing directories without `cd`
@@ -100,21 +101,42 @@ unsetopt CORRECT                # Disable prezto utility module auto correct fea
 # Common CTRL bindings.
 bindkey "^a" beginning-of-line
 bindkey "^d" end-of-line
-bindkey "^k" kill-line
-bindkey "^y" accept-and-hold
+bindkey "^s" backward-kill-line
 bindkey "^w" backward-kill-word
-bindkey "^[[1;5C" forward-word
-bindkey "^[[1;5D" backward-word
+if [[ $OSTYPE = (darwin)* ]]; then
+  bindkey "^[[1;5C" forward-word
+  bindkey "^[[1;5D" backward-word
+fi
 
 # =============================================================================
 #                                   Aliases
 # =============================================================================
 if (( $+commands[htop] )); then alias top='htop'; fi
+if (( $+commands[bashtop] )); then alias btop='bashtop'; fi
 if (( $+commands[ncdu] )); then alias du="ncdu --color dark -rr -x --exclude .git --exclude node_modules"; fi
 if (( $+commands[direnv] )); then eval "$(direnv hook zsh)"; fi
 if [ "$(uname 2> /dev/null)" = "Linux" ]; then
     alias open='xdg-open'
+    alias clipboard="xclip -selection c"
 fi
+
+if (( $+commands[exa] )); then
+  # Changing "ls" to "exa"
+  alias ls='exa -al --color=always --group-directories-first' # my preferred listing
+  alias la='exa -a --color=always --group-directories-first'  # all files and dirs
+  alias ll='exa -l --color=always --group-directories-first'  # long format
+  alias lt='exa -aT --color=always --group-directories-first' # tree listing
+fi
+
+
+# adding flags to default commands
+alias cp="cp -i"                          # confirm before overwriting something
+alias df='df -h'                          # human-readable sizes
+alias free='free -m'                      # show sizes in MB
+
+# bare git repo alias for dotfiles
+alias config="git --git-dir=$HOME/dotfiles --work-tree=$HOME"
+
 
 # =============================================================================
 #                                   Startup
@@ -201,17 +223,15 @@ gpr() {
   fi
 }
 
-# sets the tab title to current dir
-precmd() {
-  echo -ne "\e]1;${PWD##*/}\a"
-}
+if [[ $OSTYPE = (darwin)* ]]; then
+  precmd() {
+    echo -ne "\e]1;${PWD##*/}\a"
+  }
+else
+  export PATH="/home/matdurand/.linuxbrew/opt/openssl@1.1/bin:$PATH"
+  fpath=($fpath "/home/matdurand/.zfunctions")
+fi
 
-# Prompt config
-SPACESHIP_TIME_SHOW=true
-SPACESHIP_PROMPT_ORDER=(dir git docker exec_time  line_sep exit_code char)
-SPACESHIP_RPROMPT_ORDER=(kubecontext node package time)
-SPACESHIP_DIR_TRUNC=0
-SPACESHIP_DIR_TRUNC_REPO=false
 
 # =============================================================================
 # Provide extension point to run AFTER the template zshrc
