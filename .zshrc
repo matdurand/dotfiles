@@ -232,6 +232,15 @@ else
   fpath=($fpath "/home/matdurand/.zfunctions")
 fi
 
+# =============================================================================
+# Autocompletion for kitty terminal
+# =============================================================================
+
+autoload -Uz compinit
+compinit
+# Completion for kitty
+kitty + complete setup zsh | source /dev/stdin
+
 
 # =============================================================================
 # Provide extension point to run AFTER the template zshrc
