@@ -64,7 +64,10 @@ fi
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 #zplug "zsh-users/zsh-history-substring-search", defer:3
-zplug "sharkdp/bat", as:command, from:gh-r, rename-to:bat
+if [[ $OSTYPE = (darwin)* ]]; then
+  #bat zplug package is not working on ubuntu, installing via cargo instead
+  zplug "sharkdp/bat", as:command, from:gh-r, rename-to:bat
+fi
 zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
 
 zplug "agkozak/zsh-z"
@@ -128,7 +131,6 @@ if (( $+commands[exa] )); then
   alias lt='exa -aT --color=always --group-directories-first' # tree listing
 fi
 
-
 # adding flags to default commands
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
@@ -136,6 +138,7 @@ alias free='free -m'                      # show sizes in MB
 
 # bare git repo alias for dotfiles
 alias config="git --git-dir=$HOME/dotfiles --work-tree=$HOME"
+alias config-diff="git --git-dir=$HOME/dotfiles --work-tree=$HOME diff --cached"
 
 
 # =============================================================================
@@ -223,11 +226,11 @@ gpr() {
   fi
 }
 
-if [[ $OSTYPE = (darwin)* ]]; then
-  precmd() {
-    echo -ne "\e]1;${PWD##*/}\a"
-  }
-else
+precmd() {
+  #echo -ne "\e]1;${PWD##*/}\a"
+  printf "\e]2;%s\a" "${PWD##*/}"
+}
+if [[ $OSTYPE != (darwin)* ]]; then
   export PATH="/home/matdurand/.linuxbrew/opt/openssl@1.1/bin:$PATH"
   fpath=($fpath "/home/matdurand/.zfunctions")
 fi

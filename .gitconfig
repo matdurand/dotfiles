@@ -36,26 +36,23 @@
 
 [core]
 	editor = code --wait
-  pager = diff-so-fancy | less --tabs=4 -RFX
-[diff]
-  tool = wstorm
-[difftool]
-  prompt = false
-[difftool.wstorm]
-  cmd = /usr/local/bin/wstorm diff "$LOCAL" "$REMOTE" && read
-  trustExitCode = true
-[merge]
-  tool = wstorm
-[mergetool.wstorm]
-  cmd = /usr/local/bin/wstorm merge "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
+  pager = delta
+[delta]
+  plus-color = "#ffffff"
+  minus-color = "#ff7777"
+  features = side-by-side unobtrusive-line-numbers
+  syntax-theme = OneHalfDark
+[delta "unobtrusive-line-numbers"]
+    line-numbers = true
+    line-numbers-minus-style = "#848484"
+    line-numbers-zero-style = "#848484"
+    line-numbers-plus-style = "#848484"
+    line-numbers-left-style = "#848484"
+    line-numbers-right-style = "#848484"
+[interactive]
+  diffFilter = delta --color-only
 [commit]
 	template = ~/.gitmessage
-[difftool "sourcetree"]
-	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --nosplash \"$LOCAL\" \"$REMOTE\"
-	path =
-[mergetool "sourcetree"]
-	cmd = /Applications/DiffMerge.app/Contents/MacOS/DiffMerge --merge --result=\"$MERGED\" \"$LOCAL\" \"$BASE\" \"$REMOTE\"
-	trustExitCode = true
 [color]
 	ui = true
 [color "diff-highlight"]
@@ -73,5 +70,3 @@
 [user]
 	email = 1435391+matdurand@users.noreply.github.com
 	name = Mathieu Durand
-[diff "sopsdiffer"]
-	textconv = sops -d
