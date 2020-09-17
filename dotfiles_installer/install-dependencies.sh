@@ -1,5 +1,16 @@
 #!/usr/bin/env bash
 
+#Installing Rust-Cargo
+curl https://sh.rustup.rs -sSf | sh
+##Rust packages
+cargo install exa
+cargo install git-delta
+cargo install bat
+
+#Node modules (via NVM)
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+nvm install 10
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Install command-line tools using Homebrew.
 
@@ -19,16 +30,12 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   brew cask install font-menlo-for-powerline
 
   brew install htop
-  brew install diff-so-fancy
   brew install ncdu
   brew install httpie
   brew install tree
 
   brew install fd
   brew install ripgrep
-  brew install exa
-  brew install awscli
-  brew install nvm
 else
 
   sudo apt-get install zsh fonts-firacode htop ripgrep fd-find libz-dev bashtop vim emacs rename ulauncher httpie ncdu xclip xsel
@@ -38,17 +45,4 @@ else
   sudo snap install auto-cpufreq
   sudo auto-cpufreq --install
 
-  #Installing Rust-Cargo
-  curl https://sh.rustup.rs -sSf | sh
-  ##Rust packages
-  cargo install exa
-  cargo install starship
-  cargo install git-delta
-  cargo install bat
-
-  #Node modules (via NVM)
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-  nvm install 10
-  npm install -g diff-so-fancy
-  npm install -g spaceship-prompt
 fi

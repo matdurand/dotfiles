@@ -22,6 +22,9 @@ source ~/.zplug/init.zsh
 # zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
+# Spaceship theme
+zplug denysdovhan/spaceship-prompt, use:spaceship.zsh, from:github, as:theme
+
 # Prezto framework
 zplug "sorin-ionescu/prezto", \
   use:"init.zsh", \
@@ -69,7 +72,6 @@ if [[ $OSTYPE = (darwin)* ]]; then
   zplug "sharkdp/bat", as:command, from:gh-r, rename-to:bat
 fi
 zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
-
 zplug "agkozak/zsh-z"
 
 # Starship prompt
@@ -236,8 +238,15 @@ if [[ $OSTYPE != (darwin)* ]]; then
 fi
 
 # =============================================================================
-# Autocompletion for kitty terminal
+# Prompt config
 # =============================================================================
+
+# Prompt config
+SPACESHIP_TIME_SHOW=true
+SPACESHIP_PROMPT_ORDER=(dir git docker exec_time  line_sep exit_code char)
+SPACESHIP_RPROMPT_ORDER=(kubecontext node package time)
+SPACESHIP_DIR_TRUNC=0
+SPACESHIP_DIR_TRUNC_REPO=false
 
 autoload -Uz compinit
 compinit

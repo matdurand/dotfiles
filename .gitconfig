@@ -38,8 +38,6 @@
 	editor = code --wait
   pager = delta
 [delta]
-  plus-color = "#ffffff"
-  minus-color = "#ff7777"
   features = side-by-side unobtrusive-line-numbers
   syntax-theme = OneHalfDark
 [delta "unobtrusive-line-numbers"]
