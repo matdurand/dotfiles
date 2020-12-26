@@ -137,11 +137,12 @@ fi
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
+alias fd=fdfind
+
 
 # bare git repo alias for dotfiles
 alias config="git --git-dir=$HOME/dotfiles --work-tree=$HOME"
 alias config-diff="git --git-dir=$HOME/dotfiles --work-tree=$HOME diff --cached"
-
 
 # =============================================================================
 #                                   Startup
@@ -243,8 +244,8 @@ fi
 
 # Prompt config
 SPACESHIP_TIME_SHOW=true
-SPACESHIP_PROMPT_ORDER=(dir git docker exec_time  line_sep exit_code char)
-SPACESHIP_RPROMPT_ORDER=(kubecontext node package time)
+SPACESHIP_PROMPT_ORDER=(dir git docker kubecontext node package exec_time  line_sep exit_code char)
+SPACESHIP_RPROMPT_ORDER=(time)
 SPACESHIP_DIR_TRUNC=0
 SPACESHIP_DIR_TRUNC_REPO=false
 
@@ -254,7 +255,10 @@ compinit
 kitty + complete setup zsh | source /dev/stdin
 
 
-# =============================================================================
-# Provide extension point to run AFTER the template zshrc
-# =============================================================================
-[ -s "$HOME/.zshrc-after" ] && source ~/.zshrc-after
+export SDKMAN_DIR="/home/matdurand/.sdkman"
+[[ -s "/home/matdurand/.sdkman/bin/sdkman-init.sh" ]] && source "/home/matdurand/.sdkman/bin/sdkman-init.sh"
+
+export GOPATH=~/go
+export PATH="/home/matdurand/bin:$GOPATH/bin:$PATH"
+export SOPS_PGP_FP="FCA5D9E03CE7CAEA37CFB874A83797D7DCA3CD84"
+export EDITOR="/snap/bin/code --wait"
