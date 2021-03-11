@@ -1,14 +1,17 @@
 # =============================================================================
 # Provide extension point to run BEFORE the template zshrc
 # =============================================================================
-[ -s '$HOME/.zshrc-before' ] && source ~/.zshrc-before
+if [[ -s "$HOME/.zshrc-before" ]]; then
+  source "$HOME/.zshrc-before"
+fi
 
 # =============================================================================
 #                                   Variables
 # =============================================================================
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
-
+export CLICOLOR=1
+export TERM=xterm-256color
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border --inline-info --color=dark,fg+:214,bg+:235,hl+:10,pointer:214'
 
 # =============================================================================
@@ -137,7 +140,6 @@ fi
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
-alias fd=fdfind
 
 
 # bare git repo alias for dotfiles
@@ -244,21 +246,34 @@ fi
 
 # Prompt config
 SPACESHIP_TIME_SHOW=true
-SPACESHIP_PROMPT_ORDER=(dir git docker kubecontext node package exec_time  line_sep exit_code char)
+SPACESHIP_PROMPT_ORDER=(dir git docker node package exec_time  line_sep exit_code char)
 SPACESHIP_RPROMPT_ORDER=(time)
 SPACESHIP_DIR_TRUNC=0
 SPACESHIP_DIR_TRUNC_REPO=false
 
 autoload -Uz compinit
 compinit
-# Completion for kitty
-kitty + complete setup zsh | source /dev/stdin
 
+if [[ -v KITTY_WINDOW_ID ]]; then
+  # Completion for kitty
+  kitty + complete setup zsh | source /dev/stdin
+fi
 
-export SDKMAN_DIR="/home/matdurand/.sdkman"
-[[ -s "/home/matdurand/.sdkman/bin/sdkman-init.sh" ]] && source "/home/matdurand/.sdkman/bin/sdkman-init.sh"
+if [[ -s "$HOME/go" ]]; then
+  #source ~/.gvm/scripts/gvm
+  export GOPATH="$HOME/go"
+  export PATH="$HOME/go/bin:$PATH"
+fi
 
-export GOPATH=~/go
-export PATH="/home/matdurand/bin:$GOPATH/bin:$PATH"
-export SOPS_PGP_FP="FCA5D9E03CE7CAEA37CFB874A83797D7DCA3CD84"
-export EDITOR="/snap/bin/code --wait"
+if [[ -s "$HOME/.sdkman" ]]; then
+  export SDKMAN_DIR="$HOME/.sdkman"
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
+
+if [[ -s "$HOME/.cargo/env" ]]; then
+  source "$HOME/.cargo/env"
+fi
+
+if [[ -s "$HOME/.zshrc-after" ]]; then
+  source "$HOME/.zshrc-after"
+fi

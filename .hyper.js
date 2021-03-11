@@ -43,7 +43,7 @@ module.exports = {
 
     // terminal background color
     // opacity is only supported on macOS
-    backgroundColor: '#000',
+    backgroundColor: '#27363b',
 
     // terminal selection color
     selectionColor: '#fff',
@@ -72,23 +72,24 @@ module.exports = {
     // the full list. if you're going to provide the full color palette,
     // including the 6 x 6 color cubes and the grayscale map, just provide
     // an array here instead of a color map object
+    //di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07
     colors: {
       black: '#000000',
-      red: '#C51E14',
-      green: '#1DC121',
-      yellow: '#C7C329',
-      blue: '#0A2FC4',
-      magenta: '#C839C5',
-      cyan: '#20C5C6',
-      white: '#C7C7C7',
-      lightBlack: '#686868',
-      lightRed: '#FD6F6B',
-      lightGreen: '#67F86F',
-      lightYellow: '#FFFA72',
-      lightBlue: '#6A76FB',
-      lightMagenta: '#FD7CFC',
-      lightCyan: '#68FDFE',
-      lightWhite: '#FFFFFF',
+      red: '#ff7777',
+      green: '#82c35e',
+      yellow: '#c8c11c',
+      blue: '#72c6fa',
+      magenta: '#ab96bc',
+      cyan: '#44a9ba',
+      white: '#d6d6d6',
+      lightBlack: '#636363',
+      lightRed: '#ed486f',
+      lightGreen: '#9ddf85',
+      lightYellow: '#dede1a',
+      lightBlue: '#fff',
+      lightMagenta: '#b8a3db',
+      lightCyan: '#87c7d4',
+      lightWhite: '#bfc2bc',
     },
 
     // the shell to run when spawning a new session (i.e. /usr/local/bin/fish)
@@ -164,11 +165,11 @@ module.exports = {
   //   `@company/project`
   //   `project#1.0.1`
   plugins: [
-    "hyper-material-theme",
     "hyper-search",
     "hypercwd",
     "hyper-pane",
-    "hyper-active-tab"
+    "hyper-active-tab",
+    "hyper-dark-scrollbar"
   ],
 
   // in development, you can create a directory under

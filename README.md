@@ -22,9 +22,11 @@ On an existing system, to clone this, you would do
 git clone --bare git@github.com:matdurand/dotfiles.git ~/dotfiles
 alias config='git --git-dir=$HOME/dotfiles/ --work-tree=$HOME'
 config config --local status.showUntrackedFiles no
+cd ~
+config checkout
 ```
 
-The alias is added to the .zshrc.
+The alias is added to the .zshrc
 
 ## Basic usage, to add a dotfileto the repo and commit:
 

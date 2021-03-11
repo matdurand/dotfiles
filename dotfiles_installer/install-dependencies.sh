@@ -25,9 +25,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   brew install zsh-history-substring-search
 
   brew tap homebrew/cask-fonts
-  brew cask install font-fira-code
-  brew cask install font-hack-nerd-font
-  brew cask install font-menlo-for-powerline
+  brew install --cask font-fira-code
+  brew install --cask font-hack-nerd-font
+  brew install --cask font-menlo-for-powerline
 
   brew install htop
   brew install ncdu
@@ -36,6 +36,13 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   brew install fd
   brew install ripgrep
+
+  brew install kubectl
+  brew install --cask rectangle
+  brew install --cask insomnia
+
+  brew install go
+  brew install zsh
 else
 
   sudo apt-get install zsh fonts-firacode htop ripgrep fd-find libz-dev bashtop vim emacs rename ulauncher httpie ncdu xclip xsel
