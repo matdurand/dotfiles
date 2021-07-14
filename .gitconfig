@@ -1,5 +1,6 @@
 [alias]
   a = add
+  aa = add .
   s = status -s
   ca = commit -a
   cm = !"f() { GIT_COMMITTER_DATE=\"$(date)\"; git commit --amend --no-edit --date \"$(date)\"; }; f"
@@ -24,7 +25,7 @@
   publish = "!git push -u origin $(git branch-name)"
   fpush = "!git push -f origin $(git branch-name)"
   addf = "!git add $(git ls-files -m --others --exclude-standard | fzf -m)"
-  rmf = "!git rm $(git ls-files -m --others --exclude-standard | fzf -m)"
+  rmf = "!git rm --cached $(git diff --name-only --cached | fzf -m)"
   rh = reset --hard
   fa = fetch --all
   search = "!git show $(git log --pretty=oneline | fzf | cut -d=' ' -f1)"
@@ -68,3 +69,11 @@
 [user]
 	email = 1435391+matdurand@users.noreply.github.com
 	name = Mathieu Durand
+[pull]
+	rebase = false
+[merge]
+    tool = vscode
+[mergetool "vscode"]
+    cmd = code --wait $MERGED
+[init]
+	defaultBranch = main
