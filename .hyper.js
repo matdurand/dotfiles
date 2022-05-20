@@ -4,6 +4,8 @@
 
 module.exports = {
   config: {
+    scrollback: 50000,
+
     // choose either `'stable'` for receiving highly polished,
     // or `'canary'` for less polished but more frequent updates
     updateChannel: 'stable',
@@ -27,7 +29,7 @@ module.exports = {
     letterSpacing: 1,
 
     // terminal cursor background color and opacity (hex, rgb, hsl, hsv, hwb or cmyk)
-    cursorColor: 'rgba(248,28,229,0.8)',
+    cursorColor: 'rgba(248,128,229,1)',
 
     // terminal text color under BLOCK cursor
     cursorAccentColor: '#000',

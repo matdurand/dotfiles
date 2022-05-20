@@ -1,3 +1,5 @@
+#zmodload zsh/zprof
+
 # =============================================================================
 # Provide extension point to run BEFORE the template zshrc
 # =============================================================================
@@ -77,8 +79,16 @@ fi
 zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
 zplug "agkozak/zsh-z"
 
+#export NVM_AUTO_USE=true
+#export NVM_COMPLETION=true
+#export NVM_LAZY_LOAD=true
+#zplug "lukechilds/zsh-nvm"
+
 # Starship prompt
 if (( $+commands[starship] )); then eval "$(starship init zsh)"; fi
+
+# https://github.com/wfxr/forgit
+zplug 'wfxr/forgit'
 
 # =============================================================================
 #                                   Options
@@ -140,7 +150,7 @@ fi
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
-
+alias kc='kubectl'
 
 # bare git repo alias for dotfiles
 alias config="git --git-dir=$HOME/dotfiles --work-tree=$HOME"
@@ -176,19 +186,16 @@ zplug load
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Custom git aliases
 # For some reason, this alias cannot be oput in gitconfig
-fzfgithistory() {
-  git log --graph --format='%C(auto)%h%d %s %C(white)%C(bold)%cr' --color=always "$@" | fzf --ansi --reverse --tiebreak=index --no-sort --bind=ctrl-s:toggle-sort --preview 'f() { set -- $(echo -- "$@" | grep -o "[a-f0-9]\{7\}"); [ $# -eq 0 ] || git show --color=always $1; }; f {}'
-}
 git() {
   case $1 in
     lgp)
-      fzfgithistory
+      glo
       ;;
     *)
       command git "$@"
@@ -246,18 +253,25 @@ fi
 
 # Prompt config
 SPACESHIP_TIME_SHOW=true
-SPACESHIP_PROMPT_ORDER=(dir git docker node package exec_time  line_sep exit_code char)
-SPACESHIP_RPROMPT_ORDER=(time)
+SPACESHIP_KUBECTL_SHOW=true
+SPACESHIP_NODE_PREFIX="node="
+SPACESHIP_NODE_SYMBOL=""
+SPACESHIP_KUBECTL_PREFIX="k8s="
+SPACESHIP_KUBECTL_SYMBOL=""
+SPACESHIP_KUBECTL_VERSION_SHOW=false
+SPACESHIP_PROMPT_ORDER=(dir git node kubectl time line_sep exit_code char)
+SPACESHIP_RPROMPT_ORDER=
 SPACESHIP_DIR_TRUNC=0
 SPACESHIP_DIR_TRUNC_REPO=false
 
-autoload -Uz compinit
-compinit
+autoload -Uz compinit && compinit
 
 if [[ -v KITTY_WINDOW_ID ]]; then
   # Completion for kitty
   kitty + complete setup zsh | source /dev/stdin
 fi
+
+. $(pack completion --shell zsh)
 
 if [[ -s "$HOME/go" ]]; then
   #source ~/.gvm/scripts/gvm
@@ -277,3 +291,4 @@ fi
 if [[ -s "$HOME/.zshrc-after" ]]; then
   source "$HOME/.zshrc-after"
 fi
+

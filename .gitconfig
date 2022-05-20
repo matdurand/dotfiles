@@ -8,9 +8,10 @@
   cos = "!git switch $(git branch | fzf)"
   rea = rebase --abort
   rec = rebase --continue
+  chp = cherry-pick
   #switch branches
   sw = "!git switch $(git recent-branches | fzf)"
-  wip = "!git add --all :/ && git commit -m 'WIP'"
+  wip = "!git add --all :/ && git commit -m 'WIP' --no-verify"
   ls = "!git log --oneline --decorate | fzf"
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
   ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --numstat
@@ -52,6 +53,7 @@
   diffFilter = delta --color-only
 [commit]
 	template = ~/.gitmessage
+	gpgsign = true
 [color]
 	ui = true
 [color "diff-highlight"]
@@ -69,6 +71,7 @@
 [user]
 	email = 1435391+matdurand@users.noreply.github.com
 	name = Mathieu Durand
+	signingkey = 9AF2702F10AC47DE
 [pull]
 	rebase = false
 [merge]
@@ -77,3 +80,5 @@
     cmd = code --wait $MERGED
 [init]
 	defaultBranch = main
+[gpg]
+	program = gpg
