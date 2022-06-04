@@ -140,10 +140,12 @@ fi
 
 if (( $+commands[exa] )); then
   # Changing "ls" to "exa"
-  alias ls='exa -al --color=always --group-directories-first' # my preferred listing
-  alias la='exa -a --color=always --group-directories-first'  # all files and dirs
-  alias ll='exa -l --color=always --group-directories-first'  # long format
+  alias ls='exa -al --color=always --group-directories-first' # list all by default
   alias lt='exa -aT --color=always --group-directories-first' # tree listing
+  alias lm='exa -lm --color=always --sort=modified'           # sorted by date
+  alias lz='exa -lm --color=always --sort=size'               # sorted by size
+  alias l='exa'
+  alias ll='ls'
 fi
 
 # adding flags to default commands
