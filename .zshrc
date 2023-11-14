@@ -44,12 +44,8 @@ fi
 # peco is grep on steriod
 zplug "peco/peco",        as:command, from:gh-r
 
-zplug "junegunn/fzf-bin", as:command, from:gh-r, rename-to:fzf, \
-	use:"*${(L)$(uname -s)}*amd64*"
-zplug "junegunn/fzf", use:"shell/*.zsh", as:plugin
-
 # Enhanced cd
-zplug "b4b4r07/enhancd", use:init.sh
+zplug "babarot/enhancd", use:init.sh
 
 # Bookmarks and jump
 zplug "jocelynmallon/zshmarks"
@@ -72,10 +68,6 @@ fi
 zplug "zsh-users/zsh-completions"
 zplug "zsh-users/zsh-autosuggestions"
 #zplug "zsh-users/zsh-history-substring-search", defer:3
-if [[ $OSTYPE = (darwin)* ]]; then
-  #bat zplug package is not working on ubuntu, installing via cargo instead
-  zplug "sharkdp/bat", as:command, from:gh-r, rename-to:bat
-fi
 zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
 zplug "agkozak/zsh-z"
 
@@ -89,6 +81,8 @@ if (( $+commands[starship] )); then eval "$(starship init zsh)"; fi
 
 # https://github.com/wfxr/forgit
 zplug 'wfxr/forgit'
+export FORGIT_NO_ALIASES=true
+export FORGIT_CHECKOUT_BRANCH_BRANCH_GIT_OPTS='--sort=-committerdate'
 
 # =============================================================================
 #                                   Options
@@ -153,6 +147,7 @@ alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias kc='kubectl'
+alias cat='bat'
 
 # bare git repo alias for dotfiles
 alias config="git --git-dir=$HOME/dotfiles --work-tree=$HOME"
@@ -172,7 +167,7 @@ if zplug check "zsh-users/zsh-history-substring-search"; then
   bindkey '\e[B' history-substring-search-down
 fi
 
-if zplug check "b4b4r07/enhancd"; then
+if zplug check "babarot/enhancd"; then
   ENHANCD_DOT_SHOW_FULLPATH=1
 	ENHANCD_DISABLE_HOME=0
   ENHANCD_DOT_ARG=...
@@ -191,19 +186,6 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 #export NVM_DIR="$HOME/.nvm"
 #[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 #[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# Custom git aliases
-# For some reason, this alias cannot be oput in gitconfig
-git() {
-  case $1 in
-    lgp)
-      glo
-      ;;
-    *)
-      command git "$@"
-      ;;
-  esac
-}
 
 # Generic find function to locate the first match going up in the folder hierarchy
 function upfind() {
@@ -240,13 +222,29 @@ gpr() {
   fi
 }
 
-precmd() {
-  #echo -ne "\e]1;${PWD##*/}\a"
-  printf "\e]2;%s\a" "${PWD##*/}"
+decode_base64_url() {
+  local len=$((${#1} % 4))
+  local result="$1"
+  if [ $len -eq 2 ]; then result="$1"'=='
+  elif [ $len -eq 3 ]; then result="$1"'=' 
+  fi
+  echo "$result" | tr '_-' '/+' | openssl enc -d -base64
 }
+
+decode_jwt(){
+   decode_base64_url $(echo -n $2 | cut -d "." -f $1) | jq .
+}
+
+# Decode JWT header
+alias jwth="decode_jwt 1"
+
+# Decode JWT Payload
+alias jwtp="decode_jwt 2"
+
 if [[ $OSTYPE != (darwin)* ]]; then
   export PATH="/home/matdurand/.linuxbrew/opt/openssl@1.1/bin:$PATH"
   fpath=($fpath "/home/matdurand/.zfunctions")
+  $(brew --prefix)/opt/fzf/install
 fi
 
 # =============================================================================

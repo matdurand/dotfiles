@@ -33,6 +33,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   brew install ncdu
   brew install httpie
   brew install tree
+  brew install fzf
+  brew install bat
 
   brew install fd
   brew install ripgrep
@@ -46,7 +48,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 else
 
   sudo apt-get install zsh fonts-firacode htop ripgrep fd-find libz-dev bashtop vim emacs rename ulauncher httpie ncdu xclip xsel
-  sudo apt-get install build-essential curl file git ttf-mscorefonts-installer libaio1 jq
+  sudo apt-get install build-essential curl file git ttf-mscorefonts-installer libaio1 jq fzf
 
   #Installing auto-cpufreq for power management
   sudo snap install auto-cpufreq

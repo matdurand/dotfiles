@@ -9,8 +9,6 @@
   rea = rebase --abort
   rec = rebase --continue
   chp = cherry-pick
-  #switch branches
-  sw = "!git switch $(git recent-branches | fzf)"
   wip = "!git add --all :/ && git commit -m 'WIP' --no-verify"
   ls = "!git log --oneline --decorate | fzf"
   lg = log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --all
@@ -21,16 +19,22 @@
   undo-commit = reset --soft HEAD^
   # checkout a new branch
   nb = checkout -b
+  # forgit commands
+  sw = forgit checkout_branch
+  lgp = forgit log
+  addf = forgit add
+  diffi = forgit diff
+  stashi = forgit stash_show
+  cpi = forgit cherry_pick_from_branch
   # Push the current branch to the remote "origin", and set it to track
   # the upstream branch
   publish = "!git push -u origin $(git branch-name)"
   fpush = "!git push -f origin $(git branch-name)"
-  addf = "!git add $(git ls-files -m --others --exclude-standard | fzf -m)"
   rmf = "!git rm --cached $(git diff --name-only --cached | fzf -m)"
   rh = reset --hard
   fa = fetch --all
-  search = "!git show $(git log --pretty=oneline | fzf | cut -d=' ' -f1)"
-  squash-branch= !HASH=`git log --pretty=oneline | head -n 100 | fzf` && git rebase -i `echo ${HASH} | awk '{ print $1 }'`^
+  search = "!git show $(git log --pretty='format:%C(auto)%H %s %d' | fzf | cut -d=' ' -f1)"
+  squash-branch= !HASH=`git log --pretty='format:%C(auto)%H %s %d' | head -n 100 | fzf` && git rebase -i `echo ${HASH} | awk '{ print $1 }'`^
 
   #intermediary aliases
   recent-branches = "!git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -n 100"
@@ -72,6 +76,8 @@
 	email = 1435391+matdurand@users.noreply.github.com
 	name = Mathieu Durand
 	signingkey = 9AF2702F10AC47DE
+[url "ssh://git@github.com/"]
+	insteadOf = https://github.com/
 [pull]
 	rebase = false
 [merge]
