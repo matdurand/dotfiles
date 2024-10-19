@@ -24,6 +24,7 @@
   lgp = forgit log
   addf = forgit add
   diffi = forgit diff
+  dft = difftool
   stashi = forgit stash_show
   cpi = forgit cherry_pick_from_branch
   # Push the current branch to the remote "origin", and set it to track
@@ -41,50 +42,61 @@
   branch-name = "!git rev-parse --abbrev-ref HEAD"
 
 [core]
-	editor = code --wait
+  editor = code --wait
   pager = delta
 [delta]
   features = side-by-side unobtrusive-line-numbers
   syntax-theme = OneHalfDark
 [delta "unobtrusive-line-numbers"]
-    line-numbers = true
-    line-numbers-minus-style = "#848484"
-    line-numbers-zero-style = "#848484"
-    line-numbers-plus-style = "#848484"
-    line-numbers-left-style = "#848484"
-    line-numbers-right-style = "#848484"
+  line-numbers = true
+  line-numbers-minus-style = "#848484"
+  line-numbers-zero-style = "#848484"
+  line-numbers-plus-style = "#848484"
+  line-numbers-left-style = "#848484"
+  line-numbers-right-style = "#848484"
 [interactive]
   diffFilter = delta --color-only
 [commit]
-	template = ~/.gitmessage
-	gpgsign = true
+  template = ~/.gitmessage
+  gpgsign = true
 [color]
-	ui = true
+  ui = true
 [color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
 [color "diff"]
-	meta = yellow
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
+  meta = yellow
+  frag = magenta bold
+  commit = yellow bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
 [user]
-	email = 1435391+matdurand@users.noreply.github.com
-	name = Mathieu Durand
-	signingkey = 9AF2702F10AC47DE
+  email = 1435391+matdurand@users.noreply.github.com
+  name = Mathieu Durand
+  signingkey = 9AF2702F10AC47DE
 [url "ssh://git@github.com/"]
-	insteadOf = https://github.com/
+  insteadOf = https://github.com/
 [pull]
-	rebase = false
+  rebase = false
 [merge]
-    tool = vscode
+  tool = vscode
 [mergetool "vscode"]
-    cmd = code --wait $MERGED
+  cmd = code --wait $MERGED
 [init]
-	defaultBranch = main
+  defaultBranch = main
 [gpg]
-	program = gpg
+  program = gpg
+[diff]
+  tool = difftastic
+  external = difft
+[difftool]
+  prompt = false
+[difftool "difftastic"]
+  cmd = difft "$LOCAL" "$REMOTE"
+[pager]
+  difftool = true
+[spice "branchCreate"]
+	commit = false

@@ -2,14 +2,13 @@
 
 #Installing Rust-Cargo
 curl https://sh.rustup.rs -sSf | sh
+
 ##Rust packages
-cargo install exa
+cargo install eza
 cargo install git-delta
 cargo install bat
-
-#Node modules (via NVM)
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
-nvm install 10
+cargo install zoxide
+cargo install atuin
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Install command-line tools using Homebrew.
@@ -34,7 +33,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   brew install httpie
   brew install tree
   brew install fzf
-  brew install bat
+  brew install forgit
 
   brew install fd
   brew install ripgrep
@@ -45,6 +44,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   brew install go
   brew install zsh
+
 else
 
   sudo apt-get install zsh fonts-firacode htop ripgrep fd-find libz-dev bashtop vim emacs rename ulauncher httpie ncdu xclip xsel
@@ -55,3 +55,6 @@ else
   sudo auto-cpufreq --install
 
 fi
+
+# Prompt
+git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k

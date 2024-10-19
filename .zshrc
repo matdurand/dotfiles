@@ -1,10 +1,10 @@
 #zmodload zsh/zprof
 
-# =============================================================================
-# Provide extension point to run BEFORE the template zshrc
-# =============================================================================
-if [[ -s "$HOME/.zshrc-before" ]]; then
-  source "$HOME/.zshrc-before"
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # =============================================================================
@@ -13,76 +13,113 @@ fi
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 export CLICOLOR=1
-export TERM=xterm-256color
+
+if [[ -f "/opt/homebrew/bin/brew" ]] then
+  # If you're using macOS, you'll want this enabled
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# =============================================================================
+# Provide extension point to run BEFORE the template zshrc
+# =============================================================================
+if [[ -s "$HOME/.zshrc-before" ]]; then
+  source "$HOME/.zshrc-before"
+fi
+
+# Set the directory we want to store zinit and plugins
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+
+# Download Zinit, if it's not there yet
+if [ ! -d "$ZINIT_HOME" ]; then
+   mkdir -p "$(dirname $ZINIT_HOME)"
+   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+fi
+
+# Source/Load zinit
+source "${ZINIT_HOME}/zinit.zsh"
+
+# Add in Powerlevel10k
+zinit ice depth=1; zinit light romkatv/powerlevel10k
+
+# Add in zsh plugins
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-history-substring-search
+zinit light babarot/enhancd
+zinit light Aloxaf/fzf-tab
+
+autoload -Uz compinit && compinit
+zinit cdreplay -q
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+
+# ---- FZF -----
+# Set up fzf key bindings and fuzzy completion
+eval "$(fzf --zsh)"
+
+# --- setup fzf theme ---
+fg="#CBE0F0"
+bg="#011628"
+bg_highlight="#143652"
+purple="#B388FF"
+blue="#06BCE4"
+cyan="#2CF9ED"
+
+
+#export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border --inline-info --color=dark,fg+:214,bg+:235,hl+:10,pointer:214'
 
-# =============================================================================
-#                                   Plugins
-# =============================================================================
+# -- Use fd instead of fzf --
 
-# Check if zplug is installed
-[ ! -d ~/.zplug ] && git clone https://github.com/zplug/zplug ~/.zplug
-source ~/.zplug/init.zsh
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
 
-# zplug
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
 
-# Spaceship theme
-zplug denysdovhan/spaceship-prompt, use:spaceship.zsh, from:github, as:theme
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
 
-# Prezto framework
-zplug "sorin-ionescu/prezto", \
-  use:"init.zsh", \
-  hook-build:"ln -s $ZPLUG_HOME/repos/sorin-ionescu/prezto ~/.zprezto"
+#source ~/fzf-git.sh/fzf-git.sh
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
+show_file_or_dir_preview="if [ -d {} ]; then eza --tree --color=always {} | head -200; else bat -n --color=always --line-range :500 {}; fi"
 
-# Miscellaneous commands
-# peco is grep on steriod
-zplug "peco/peco",        as:command, from:gh-r
+export FZF_CTRL_T_OPTS="--preview '$show_file_or_dir_preview'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
 
-# Enhanced cd
-zplug "babarot/enhancd", use:init.sh
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
 
-# Bookmarks and jump
-zplug "jocelynmallon/zshmarks"
+  case "$command" in
+    cd)           fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
+    export|unset) fzf --preview "eval 'echo \${}'"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview "$show_file_or_dir_preview" "$@" ;;
+  esac
+}
 
-# Enhanced dir list with git features
-zplug "supercrabtree/k"
+# ---- For GIT -----
 
-# Jump back to parent directory (using the bd {x} command, where x is the number of directory to go back)
-zplug "tarrasch/zsh-bd"
-
-# from oh-my-zsh
-zplug "plugins/copydir",           from:oh-my-zsh
-zplug "plugins/copyfile",          from:oh-my-zsh
-zplug "plugins/extract",           from:oh-my-zsh
-zplug "plugins/history",           from:oh-my-zsh
-if [[ $OSTYPE = (darwin)* ]]; then
-    zplug "lib/clipboard",         from:oh-my-zsh
-fi
-
-zplug "zsh-users/zsh-completions"
-zplug "zsh-users/zsh-autosuggestions"
-#zplug "zsh-users/zsh-history-substring-search", defer:3
-zplug "b4b4r07/cli-finder", as:command, use:"bin/finder"
-zplug "agkozak/zsh-z"
-
-#export NVM_AUTO_USE=true
-#export NVM_COMPLETION=true
-#export NVM_LAZY_LOAD=true
-#zplug "lukechilds/zsh-nvm"
-
-# Starship prompt
-if (( $+commands[starship] )); then eval "$(starship init zsh)"; fi
-
-# https://github.com/wfxr/forgit
-zplug 'wfxr/forgit'
 export FORGIT_NO_ALIASES=true
 export FORGIT_CHECKOUT_BRANCH_BRANCH_GIT_OPTS='--sort=-committerdate'
+
+# ---- Enhanced CD -----
+
+export ENHANCD_ARG_DOUBLE_DOT=...
 
 # =============================================================================
 #                                   Options
@@ -92,6 +129,7 @@ export FORGIT_CHECKOUT_BRANCH_BRANCH_GIT_OPTS='--sort=-committerdate'
 HISTFILE=~/.zsh_history
 HISTSIZE=20000
 SAVEHIST=$HISTSIZE
+HISTDUP=erase
 
 setopt autocd                   # Allow changing directories without `cd`
 setopt append_history           # Dont overwrite history
@@ -104,7 +142,11 @@ setopt hist_ignore_all_dups     # Remember only one unique copy of the command.
 setopt hist_reduce_blanks       # Remove superfluous blanks.
 setopt hist_save_no_dups        # Omit older commands in favor of newer ones.
 setopt hist_ignore_space        # Ignore commands that start with space.
-unsetopt CORRECT                # Disable prezto utility module auto correct feature
+zstyle ':completion:*' menu no  # Disable completion menu
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'  # Case-insensitive completion
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # Use LS_COLORS for completion colors
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'ls --color $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'ls --color $realpath'
 
 # =============================================================================
 #                                Key Bindings
@@ -115,6 +157,8 @@ bindkey "^a" beginning-of-line
 bindkey "^d" end-of-line
 bindkey "^s" backward-kill-line
 bindkey "^w" backward-kill-word
+bindkey '\e[A' history-substring-search-up
+bindkey '\e[B' history-substring-search-down
 if [[ $OSTYPE = (darwin)* ]]; then
   bindkey "^[[1;5C" forward-word
   bindkey "^[[1;5D" backward-word
@@ -132,60 +176,27 @@ if [ "$(uname 2> /dev/null)" = "Linux" ]; then
     alias clipboard="xclip -selection c"
 fi
 
-if (( $+commands[exa] )); then
-  # Changing "ls" to "exa"
-  alias ls='exa -al --color=always --group-directories-first' # list all by default
-  alias lt='exa -aT --color=always --group-directories-first' # tree listing
-  alias lm='exa -lm --color=always --sort=modified'           # sorted by date
-  alias lz='exa -lm --color=always --sort=size'               # sorted by size
-  alias l='exa'
-  alias ll='ls'
-fi
-
 # adding flags to default commands
+alias ls="eza --long -bF --group-directories-first"
+alias ll="eza --long -a --group-directories-first"
+alias lmod="eza --long --modified --sort=modified -r"
 alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias kc='kubectl'
-alias cat='bat'
+
+# ---- Zoxide (better cd) ----
+eval "$(zoxide init zsh)"
 
 # bare git repo alias for dotfiles
 alias config="git --git-dir=$HOME/dotfiles --work-tree=$HOME"
 alias config-diff="git --git-dir=$HOME/dotfiles --work-tree=$HOME diff --cached"
 
 # =============================================================================
-#                                   Startup
-# =============================================================================
-
-# Install plugins if there are plugins that have not been installed
-if [[ ! -d ~/.zplug/repos/sorin-ionescu/prezto ]]; then
-  zplug install
-fi
-
-if zplug check "zsh-users/zsh-history-substring-search"; then
-  bindkey '\e[A' history-substring-search-up
-  bindkey '\e[B' history-substring-search-down
-fi
-
-if zplug check "babarot/enhancd"; then
-  ENHANCD_DOT_SHOW_FULLPATH=1
-	ENHANCD_DISABLE_HOME=0
-  ENHANCD_DOT_ARG=...
-fi
-
-# =============================================================================
-
-# Then, source plugins and add commands to $PATH
-zplug load
 
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-# NVM
-#export NVM_DIR="$HOME/.nvm"
-#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+eval "$(atuin init zsh --disable-up-arrow)"
 
 # Generic find function to locate the first match going up in the folder hierarchy
 function upfind() {
@@ -235,6 +246,14 @@ decode_jwt(){
    decode_base64_url $(echo -n $2 | cut -d "." -f $1) | jq .
 }
 
+atuin_delete(){
+  local toDelete=$1
+  atuin search --search-mode fulltext $toDelete
+  if read -q "choice?Press Y/y to delete all these: "; then
+    atuin search --delete --search-mode fulltext $toDelete
+  fi
+}
+
 # Decode JWT header
 alias jwth="decode_jwt 1"
 
@@ -246,32 +265,6 @@ if [[ $OSTYPE != (darwin)* ]]; then
   fpath=($fpath "/home/matdurand/.zfunctions")
   $(brew --prefix)/opt/fzf/install
 fi
-
-# =============================================================================
-# Prompt config
-# =============================================================================
-
-# Prompt config
-SPACESHIP_TIME_SHOW=true
-SPACESHIP_KUBECTL_SHOW=true
-SPACESHIP_NODE_PREFIX="node="
-SPACESHIP_NODE_SYMBOL=""
-SPACESHIP_KUBECTL_PREFIX="k8s="
-SPACESHIP_KUBECTL_SYMBOL=""
-SPACESHIP_KUBECTL_VERSION_SHOW=false
-SPACESHIP_PROMPT_ORDER=(dir git node kubectl time line_sep exit_code char)
-SPACESHIP_RPROMPT_ORDER=
-SPACESHIP_DIR_TRUNC=0
-SPACESHIP_DIR_TRUNC_REPO=false
-
-autoload -Uz compinit && compinit
-
-if [[ -v KITTY_WINDOW_ID ]]; then
-  # Completion for kitty
-  kitty + complete setup zsh | source /dev/stdin
-fi
-
-. $(pack completion --shell zsh)
 
 if [[ -s "$HOME/go" ]]; then
   #source ~/.gvm/scripts/gvm
@@ -291,4 +284,3 @@ fi
 if [[ -s "$HOME/.zshrc-after" ]]; then
   source "$HOME/.zshrc-after"
 fi
-
