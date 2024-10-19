@@ -20,10 +20,21 @@ if [[ -f "/opt/homebrew/bin/brew" ]] then
 fi
 
 # =============================================================================
-# Provide extension point to run BEFORE the template zshrc
+# PATHs
 # =============================================================================
-if [[ -s "$HOME/.zshrc-before" ]]; then
-  source "$HOME/.zshrc-before"
+if [[ -s "$HOME/go" ]]; then
+  #source ~/.gvm/scripts/gvm
+  export GOPATH="$HOME/go"
+  export PATH="$HOME/go/bin:$PATH"
+fi
+
+if [[ -s "$HOME/.sdkman" ]]; then
+  export SDKMAN_DIR="$HOME/.sdkman"
+  source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi
+
+if [[ -s "$HOME/.cargo/env" ]]; then
+  source "$HOME/.cargo/env"
 fi
 
 # Set the directory we want to store zinit and plugins
@@ -266,21 +277,7 @@ if [[ $OSTYPE != (darwin)* ]]; then
   $(brew --prefix)/opt/fzf/install
 fi
 
-if [[ -s "$HOME/go" ]]; then
-  #source ~/.gvm/scripts/gvm
-  export GOPATH="$HOME/go"
-  export PATH="$HOME/go/bin:$PATH"
-fi
-
-if [[ -s "$HOME/.sdkman" ]]; then
-  export SDKMAN_DIR="$HOME/.sdkman"
-  source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
-
-if [[ -s "$HOME/.cargo/env" ]]; then
-  source "$HOME/.cargo/env"
-fi
-
+# Everything in zshrc-after is machine specific and is not in dotfiles source control
 if [[ -s "$HOME/.zshrc-after" ]]; then
   source "$HOME/.zshrc-after"
 fi

@@ -1,8 +1,5 @@
 #Mathieu's dotfiles
 
-![Preview](/dotfiles_screenshots/iterm2.png?raw=true)
-(iTerm preview on OSX)
-
 # Bare git repo
 
 This is a repo to store my dotfiles. It's configured as a bare git repo.
@@ -45,20 +42,6 @@ The `dotfiles_installer` folder contains some installation scripts.
 
 * /dotfiles_installer/install-dependencies.sh: Install some dependencies using brew on OSX or APT on Ubuntu
 * /dotfiles_installer/configure-git.sh: Set the username and email for git
-* /dotfiles_installer/install-prezto.sh: Perform the installation and setup for prezto
-
-# Cleanup
-
-To clean, perform `rm -rf ~/.zplug`, which will remove the zplug dependencies.
-
-You will have to remove the dependencies manually.
-
-# OSX - iTerm2
-
-If you are using iTerm2, you need to import the color theme. To do so, go to iTerm2 preferences > Profiles > Colors.
-In the dropdown in the bottom right corner, import and select `iterm2/mathieu-iterm2-colors.itermcolors`.
-
-You also need to change the font in iTerm2 preferences > Profiles > Text. Click on change font and select Menlo for Powerline
 
 # Highlights
 
@@ -66,16 +49,14 @@ Here is a short list of the different plugins installed and how to use them.
 
 ## Search
 
-- CTRL+R allows you to search in the command history ![Preview search history](/dotfiles_screenshots/searchhistory.png?raw=true)
-- CTRL+T allows you to search for a file in the current directory (or sub-directories) ![Preview search history](/dotfiles_screenshots/searchfiles.png?raw=true)
+- CTRL+R allows you to search in the command history with Atuin database
+- CTRL+T allows you to search for a file in the current directory (or sub-directories)
 
 ## Navigation
 
-- `bd [n]` allows you to go up a number of directory. This is equivalent to doing N times `cd ..`
 - `cd ...` will show you a list of all the parent folder. If you select one, it will move you in this directory ![Preview cd back](/dotfiles_screenshots/cdback.png?raw=true)
 - [folder name], instead of tying `cd folder` you can just type the folder name to navigate into it
-- `bookmark [name]` will create a bookmark in the current folder
-- `jump [name]` will move you to the folder matching the bookmark `name`
+- `z [folder]` is using Zoxide to do fuzzy jump across folders
 
 ## Clipboard
 
