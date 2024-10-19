@@ -23,8 +23,6 @@ config.font_size = 14
 
 config.enable_tab_bar = true
 
-config.window_decorations = "TITLE | RESIZE"
-
 config.window_background_opacity = 1
 config.macos_window_background_blur = 10
 
