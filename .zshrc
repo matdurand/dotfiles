@@ -1,12 +1,5 @@
 #zmodload zsh/zprof
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 # =============================================================================
 #                                   Variables
 # =============================================================================
@@ -19,20 +12,7 @@ if [[ -f "/opt/homebrew/bin/brew" ]] then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# =============================================================================
-# PATHs
-# =============================================================================
-if [[ -s "$HOME/go" ]]; then
-  #source ~/.gvm/scripts/gvm
-  export GOPATH="$HOME/go"
-  export PATH="$HOME/go/bin:$PATH"
-fi
-
-if [[ -s "$HOME/.sdkman" ]]; then
-  export SDKMAN_DIR="$HOME/.sdkman"
-  source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
-
+# load cargo because we use a bunch of tools from cargo in this config
 if [[ -s "$HOME/.cargo/env" ]]; then
   source "$HOME/.cargo/env"
 fi
@@ -49,9 +29,6 @@ fi
 # Source/Load zinit
 source "${ZINIT_HOME}/zinit.zsh"
 
-# Add in Powerlevel10k
-zinit ice depth=1; zinit light romkatv/powerlevel10k
-
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
@@ -60,11 +37,18 @@ zinit light zsh-users/zsh-history-substring-search
 zinit light babarot/enhancd
 zinit light Aloxaf/fzf-tab
 
-autoload -Uz compinit && compinit
+# Generate autocompletions once every 24h only
+autoload -Uz compinit
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+compinit -C
+
 zinit cdreplay -q
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
+  eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
+fi
 
 
 # ---- FZF -----
@@ -78,7 +62,6 @@ bg_highlight="#143652"
 purple="#B388FF"
 blue="#06BCE4"
 cyan="#2CF9ED"
-
 
 #export FZF_DEFAULT_OPTS="--color=fg:${fg},bg:${bg},hl:${purple},fg+:${fg},bg+:${bg_highlight},hl+:${purple},info:${blue},prompt:${cyan},pointer:${cyan},marker:${cyan},spinner:${cyan},header:${cyan}"
 export FZF_DEFAULT_OPTS='--height 40% --reverse --border --inline-info --color=dark,fg+:214,bg+:235,hl+:10,pointer:214'
@@ -199,10 +182,6 @@ alias kc='kubectl'
 # ---- Zoxide (better cd) ----
 eval "$(zoxide init zsh)"
 
-# bare git repo alias for dotfiles
-alias config="git --git-dir=$HOME/dotfiles --work-tree=$HOME"
-alias config-diff="git --git-dir=$HOME/dotfiles --work-tree=$HOME diff --cached"
-
 # =============================================================================
 
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
@@ -277,7 +256,25 @@ if [[ $OSTYPE != (darwin)* ]]; then
   $(brew --prefix)/opt/fzf/install
 fi
 
+# =============================================================================
+# PATHs
+# =============================================================================
+if [[ -s "$HOME/go" ]]; then
+  #source ~/.gvm/scripts/gvm
+  export GOPATH="$HOME/go"
+  export PATH="$HOME/go/bin:$PATH"
+fi
+
+#if [[ -s "$HOME/.sdkman" ]]; then
+#  export SDKMAN_DIR="$HOME/.sdkman"
+#  # this needs to be at the end otherwise it re-generation autocompletions a second time, which is slow
+#  source "$HOME/.sdkman/bin/sdkman-init.sh"
+#fi
+
 # Everything in zshrc-after is machine specific and is not in dotfiles source control
 if [[ -s "$HOME/.zshrc-after" ]]; then
   source "$HOME/.zshrc-after"
 fi
+
+#For zsh profiling
+#zprof > ~/.zprof.log 

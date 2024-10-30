@@ -28,12 +28,15 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   brew install --cask font-hack-nerd-font
   brew install --cask font-menlo-for-powerline
 
+  brew install jandedobbeleer/oh-my-posh/oh-my-posh
+
   brew install htop
   brew install ncdu
   brew install httpie
   brew install tree
   brew install fzf
   brew install forgit
+  brew install stow
 
   brew install fd
   brew install ripgrep
@@ -54,7 +57,6 @@ else
   sudo snap install auto-cpufreq
   sudo auto-cpufreq --install
 
-fi
+  curl -s https://ohmyposh.dev/install.sh | bash -s
 
-# Prompt
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.powerlevel10k
+fi
