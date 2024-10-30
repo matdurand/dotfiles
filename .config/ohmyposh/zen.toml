@@ -1,0 +1,113 @@
+#:schema https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
+
+version = 2
+final_space = true
+console_title_template = '{{ .Shell }} in {{ .Folder }}'
+
+[palette]
+path = "blue"
+git = "green"
+highlight_bg1 = "blue"
+highlight_bg2 = "yellow"
+highlight_text = "black"
+shadow_text = "lightBlack"
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    type = 'path'
+    style = 'plain'
+    background = 'transparent'
+    foreground = 'p:path'
+    template = '{{ .Path }}'
+
+    [blocks.segments.properties]
+      style = 'full'
+
+  [[blocks.segments]]
+    type = 'git'
+    style = 'plain'
+    foreground = 'p:git'
+    background = 'transparent'
+    template = ' {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{ end }} <cyan>{{ if gt .Behind 0 }}⇣{{ end }}{{ if gt .Ahead 0 }}⇡{{ end }}</>'
+
+    [blocks.segments.properties]
+      branch_icon = ''
+      commit_icon = '@'
+      fetch_status = true
+
+  [[blocks.segments]]
+    type = "go"
+    style = "plain"
+    powerline_symbol = ""
+    foreground = "p:highlight_text"
+    background = "p:highlight_bg1"
+    template = " Go {{ .Full }} "
+
+  [[blocks.segments]]
+    type = "node"
+    style = "plain"
+    powerline_symbol = ""
+    foreground = "p:highlight_text"
+    background = "p:highlight_bg2"
+    template = " Node {{ .Full }} "
+
+[[blocks]]
+  type = 'rprompt'
+  overflow = 'hidden'
+
+  [[blocks.segments]]
+    type = 'executiontime'
+    style = 'plain'
+    foreground = 'yellow'
+    background = 'transparent'
+    template = '{{ .FormattedMs }}'
+
+    [blocks.segments.properties]
+      threshold = 5000
+
+  [[blocks.segments]]
+    type = "upgrade"
+    style = "plain"
+    foreground = "p:highlight_text"
+    background = "p:highlight_bg2"
+    template = '   OMP update '
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    type = 'text'
+    style = 'plain'
+    foreground_templates = [
+      "{{if gt .Code 0}}red{{end}}",
+      "{{if eq .Code 0}}magenta{{end}}",
+    ]
+    background = 'transparent'
+    template = '❯'
+
+[transient_prompt]
+  foreground_templates = [
+    "{{if gt .Code 0}}red{{end}}",
+    "{{if eq .Code 0}}magenta{{end}}",
+  ]
+  background = 'transparent'
+  template = '❯ '
+  newline = true
+
+[secondary_prompt]
+  foreground = 'magenta'
+  background = 'transparent'
+  template = '❯❯ '
+
+[[tooltips]]
+type = "kubectl"
+tips = [ "kubectl", "kc" ]
+style = "plain"
+foreground = "#b4f9f8"
+template = "Kube: {{.Context}}{{if .Namespace}} :: {{.Namespace}}{{end}} "
