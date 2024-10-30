@@ -5,6 +5,12 @@
 This is a repo to store my dotfiles. To install, checkout this in ~/dotfiles, cd into it and run `stow .`.
 If you don't have GNU stow, install it using your package manager first (brew on mac)
 
+Once stow is available, from this repo checkout folder, run
+```bash
+stow nvim
+stow ohmyposh
+stow home
+```
 
 ## The installation scripts
 
