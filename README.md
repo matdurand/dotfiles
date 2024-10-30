@@ -24,7 +24,7 @@ Here is a short list of the different plugins installed and how to use them.
 
 ### Navigation
 
-- `cd ...` will show you a list of all the parent folder. If you select one, it will move you in this directory ![Preview cd back](/dotfiles_screenshots/cdback.png?raw=true)
+- `cd ...` will show you a list of all the parent folder. If you select one, it will move you in this directory
 - [folder name], instead of tying `cd folder` you can just type the folder name to navigate into it
 - `z [folder]` is using Zoxide to do fuzzy jump across folders
 
@@ -38,7 +38,7 @@ Here is a short list of the different plugins installed and how to use them.
 
 - `k` is an git enhanced version of `ls`
 - many aliases:
-  - `git addf`: add individual files to the index (use TAB to select the files) ![Preview git addf](/dotfiles_screenshots/gitaddf.png?raw=true)
+  - `git addf`: add individual files to the index (use TAB to select the files)
   - `git switch`: show the list of recent branches to switch to
   - `git publish`: push the current branch to a branch with the same name on origin
   - `git fpush`: like `publish` but as force push
@@ -52,7 +52,7 @@ Here is a short list of the different plugins installed and how to use them.
   - `git rea`: abort rebase
   - `git rec`: continue rebase
   - `git delete-merged-branches`: Delete merged branches. **THIS IS POTENTIALLY DANGEROUS. BRANCHES MERGED BUT WITH LATER COMMIT MIGHT BE DELETED**
-  - `git lgp`: an interactive git history using fzf, with preview ![Preview git lgp](/dotfiles_screenshots/gitlog.png?raw=true)
+  - `git lgp`: an interactive git history using fzf, with preview 
 - the default diff has been replaced with diff-so-fancy, providing a better experience
 
 ### Other
