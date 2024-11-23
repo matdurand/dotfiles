@@ -10,6 +10,7 @@ Once stow is available, from this repo checkout folder, run
 stow nvim
 stow ohmyposh
 stow home
+stow atuin
 ```
 
 ## The installation scripts

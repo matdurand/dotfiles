@@ -187,6 +187,7 @@ eval "$(zoxide init zsh)"
 [ -d "$HOME/bin" ] && export PATH="$HOME/bin:$PATH"
 
 eval "$(atuin init zsh --disable-up-arrow)"
+. "$HOME/.atuin/bin/env"
 
 # Generic find function to locate the first match going up in the folder hierarchy
 function upfind() {
