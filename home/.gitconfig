@@ -88,7 +88,7 @@
 [init]
   defaultBranch = main
 [gpg]
-  program = gpg
+  program = gpg2
 [diff]
   tool = difftastic
   external = difft

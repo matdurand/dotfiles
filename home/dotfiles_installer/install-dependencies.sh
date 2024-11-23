@@ -2,13 +2,7 @@
 
 #Installing Rust-Cargo
 curl https://sh.rustup.rs -sSf | sh
-
-##Rust packages
-cargo install eza
-cargo install git-delta
-cargo install bat
-cargo install zoxide
-cargo install atuin
+source "$HOME/.cargo/env"
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
   # Install command-line tools using Homebrew.
@@ -25,6 +19,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   brew tap homebrew/cask-fonts
   brew install --cask font-fira-code
+  brew install --cask font-fira-code-nerd-font
   brew install --cask font-hack-nerd-font
   brew install --cask font-menlo-for-powerline
 
@@ -42,11 +37,13 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   brew install ripgrep
 
   brew install kubectl
-  brew install --cask rectangle
-  brew install --cask insomnia
+  brew install protobuf
 
   brew install go
   brew install zsh
+
+  brew install gnupg
+  brew install --cask gpg-suite
 
 else
 
@@ -60,3 +57,10 @@ else
   curl -s https://ohmyposh.dev/install.sh | bash -s
 
 fi
+
+##Rust packages
+cargo install eza
+cargo install git-delta
+cargo install bat
+cargo install zoxide
+cargo install atuin

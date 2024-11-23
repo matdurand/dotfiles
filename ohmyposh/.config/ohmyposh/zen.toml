@@ -1,16 +1,25 @@
-#:schema https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json
-
-version = 2
-final_space = true
 console_title_template = '{{ .Shell }} in {{ .Folder }}'
+version = 3
+final_space = true
 
 [palette]
-path = "blue"
-git = "green"
-highlight_bg1 = "blue"
-highlight_bg2 = "yellow"
-highlight_text = "black"
-shadow_text = "lightBlack"
+  git = 'green'
+  highlight_bg1 = 'blue'
+  highlight_bg2 = 'yellow'
+  highlight_text = 'black'
+  path = 'blue'
+  shadow_text = 'lightBlack'
+
+[secondary_prompt]
+  template = '❯❯ '
+  foreground = 'magenta'
+  background = 'transparent'
+
+[transient_prompt]
+  template = '❯ '
+  background = 'transparent'
+  foreground_templates = ['{{if gt .Code 0}}red{{end}}', '{{if eq .Code 0}}magenta{{end}}']
+  newline = true
 
 [[blocks]]
   type = 'prompt'
@@ -18,63 +27,75 @@ shadow_text = "lightBlack"
   newline = true
 
   [[blocks.segments]]
+    template = '{{ .Path }}'
+    foreground = 'p:path'
+    background = 'transparent'
     type = 'path'
     style = 'plain'
-    background = 'transparent'
-    foreground = 'p:path'
-    template = '{{ .Path }}'
 
     [blocks.segments.properties]
+      cache_duration = 'none'
       style = 'full'
 
   [[blocks.segments]]
-    type = 'git'
-    style = 'plain'
+    template = ' {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{ end }} <cyan>{{ if gt .Behind 0 }}⇣{{ end }}{{ if gt .Ahead 0 }}⇡{{ end }}</>'
     foreground = 'p:git'
     background = 'transparent'
-    template = ' {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{ end }} <cyan>{{ if gt .Behind 0 }}⇣{{ end }}{{ if gt .Ahead 0 }}⇡{{ end }}</>'
+    type = 'git'
+    style = 'plain'
 
     [blocks.segments.properties]
       branch_icon = ''
+      cache_duration = 'none'
       commit_icon = '@'
       fetch_status = true
 
   [[blocks.segments]]
-    type = "go"
-    style = "plain"
-    powerline_symbol = ""
-    foreground = "p:highlight_text"
-    background = "p:highlight_bg1"
-    template = " Go {{ .Full }} "
+    template = ' Go {{ .Full }} '
+    foreground = 'p:highlight_text'
+    powerline_symbol = ''
+    background = 'p:highlight_bg1'
+    type = 'go'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
 
   [[blocks.segments]]
-    type = "node"
-    style = "plain"
-    powerline_symbol = ""
-    foreground = "p:highlight_text"
-    background = "p:highlight_bg2"
-    template = " Node {{ .Full }} "
+    template = ' Node {{ .Full }} '
+    foreground = 'p:highlight_text'
+    powerline_symbol = ''
+    background = 'p:highlight_bg2'
+    type = 'node'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
 
 [[blocks]]
   type = 'rprompt'
   overflow = 'hidden'
 
   [[blocks.segments]]
-    type = 'executiontime'
-    style = 'plain'
+    template = '{{ .FormattedMs }}'
     foreground = 'yellow'
     background = 'transparent'
-    template = '{{ .FormattedMs }}'
+    type = 'executiontime'
+    style = 'plain'
 
     [blocks.segments.properties]
+      cache_duration = 'none'
       threshold = 5000
 
   [[blocks.segments]]
-    type = "upgrade"
-    style = "plain"
-    foreground = "p:highlight_text"
-    background = "p:highlight_bg2"
     template = '   OMP update '
+    foreground = 'p:highlight_text'
+    background = 'p:highlight_bg2'
+    type = 'upgrade'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
 
 [[blocks]]
   type = 'prompt'
@@ -82,32 +103,18 @@ shadow_text = "lightBlack"
   newline = true
 
   [[blocks.segments]]
+    template = '❯'
+    background = 'transparent'
     type = 'text'
     style = 'plain'
-    foreground_templates = [
-      "{{if gt .Code 0}}red{{end}}",
-      "{{if eq .Code 0}}magenta{{end}}",
-    ]
-    background = 'transparent'
-    template = '❯'
+    foreground_templates = ['{{if gt .Code 0}}red{{end}}', '{{if eq .Code 0}}magenta{{end}}']
 
-[transient_prompt]
-  foreground_templates = [
-    "{{if gt .Code 0}}red{{end}}",
-    "{{if eq .Code 0}}magenta{{end}}",
-  ]
-  background = 'transparent'
-  template = '❯ '
-  newline = true
-
-[secondary_prompt]
-  foreground = 'magenta'
-  background = 'transparent'
-  template = '❯❯ '
+    [blocks.segments.properties]
+      cache_duration = 'none'
 
 [[tooltips]]
-type = "kubectl"
-tips = [ "kubectl", "kc" ]
-style = "plain"
-foreground = "#b4f9f8"
-template = "Kube: {{.Context}}{{if .Namespace}} :: {{.Namespace}}{{end}} "
+  template = 'Kube: {{.Context}}{{if .Namespace}} :: {{.Namespace}}{{end}} '
+  foreground = '#b4f9f8'
+  type = 'kubectl'
+  style = 'plain'
+  tips = ['kubectl', 'kc']
