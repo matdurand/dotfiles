@@ -37,6 +37,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   brew install ripgrep
 
   brew install kubectl
+  brew install kubectx
   brew install protobuf
 
   brew install go

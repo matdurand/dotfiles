@@ -180,6 +180,7 @@ alias free='free -m'                      # show sizes in MB
 alias kc='kubectl'
 
 # ---- Zoxide (better cd) ----
+_ZO_RESOLVE_SYMLINKS=1
 eval "$(zoxide init zsh)"
 
 # =============================================================================
