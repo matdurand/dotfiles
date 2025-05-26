@@ -178,6 +178,8 @@ alias cp="cp -i"                          # confirm before overwriting something
 alias df='df -h'                          # human-readable sizes
 alias free='free -m'                      # show sizes in MB
 alias kc='kubectl'
+alias kctx='kubectx'
+alias kns='kubens'
 
 # ---- Zoxide (better cd) ----
 _ZO_RESOLVE_SYMLINKS=1
@@ -244,6 +246,37 @@ atuin_delete(){
     atuin search --delete --search-mode fulltext $toDelete
   fi
 }
+
+gh-mypr() {
+    # Column widths - modify these variables to customize column sizes
+    local PR_WIDTH=6
+    local TITLE_WIDTH=90
+    local BRANCH_WIDTH=60
+    local DATE_WIDTH=12
+    
+    # Search query - change this for different PR lists
+    local QUERY="review-requested:@me"
+    
+    # Execute GitHub CLI command with manually constructed separator
+    gh pr list --search "$QUERY" --json number,title,headRefName,createdAt,url --template "
+    {{- printf \"%-${PR_WIDTH}s | %-${TITLE_WIDTH}s | %-${BRANCH_WIDTH}s | %-${DATE_WIDTH}s | %s\\n\" \"PR #\" \"TITLE\" \"BRANCH\" \"CREATED\" \"URL\" -}}
+    {{- printf \"%s-|-%s-|-%s-|-%s-|-%s\\n\" \"$(printf '%0.s-' $(seq 1 ${PR_WIDTH}))\" \"$(printf '%0.s-' $(seq 1 ${TITLE_WIDTH}))\" \"$(printf '%0.s-' $(seq 1 ${BRANCH_WIDTH}))\" \"$(printf '%0.s-' $(seq 1 ${DATE_WIDTH}))\" \"-------------------------------------------------------------------\" -}}
+    {{- range . -}}
+        {{- \$title := .title -}}
+        {{- if gt (len .title) $(($TITLE_WIDTH - 3)) -}}
+            {{- \$title = printf \"%.$(($TITLE_WIDTH - 3))s...\" .title -}}
+        {{- end -}}
+        {{- \$branch := .headRefName -}}
+        {{- if gt (len .headRefName) $(($BRANCH_WIDTH - 3)) -}}
+            {{- \$branch = printf \"%.$(($BRANCH_WIDTH - 3))s...\" .headRefName -}}
+        {{- end -}}
+        {{- \$date := timeago .createdAt -}}
+        {{- printf \"%-${PR_WIDTH}.0f | %-${TITLE_WIDTH}s | %-${BRANCH_WIDTH}s | %-${DATE_WIDTH}s | %s\\n\" .number \$title \$branch \$date .url -}}
+    {{- end -}}
+    "
+}
+
+
 
 # Decode JWT header
 alias jwth="decode_jwt 1"

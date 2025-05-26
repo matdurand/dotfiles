@@ -35,7 +35,8 @@
   rh = reset --hard
   fa = fetch --all
   search = "!git show $(git log --pretty='format:%C(auto)%H %s %d' | fzf | cut -d=' ' -f1)"
-  squash-branch= !HASH=`git log --pretty='format:%C(auto)%H %s %d' | head -n 100 | fzf` && git rebase -i `echo ${HASH} | awk '{ print $1 }'`^
+  squash-branch = !HASH=`git log --pretty='format:%C(auto)%H %s %d' | head -n 100 | fzf` && git rebase -i `echo ${HASH} | awk '{ print $1 }'`^
+  squash-to-main = "!git reset --soft $(git merge-base HEAD main) && git commit"
 
   #intermediary aliases
   recent-branches = "!git for-each-ref --sort=-committerdate --format='%(refname:short)' refs/heads/ | head -n 100"
@@ -92,6 +93,7 @@
 [diff]
   tool = difftastic
   external = difft
+	algorithm = histogram
 [difftool]
   prompt = false
 [difftool "difftastic"]

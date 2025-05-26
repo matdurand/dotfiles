@@ -11,6 +11,7 @@ stow nvim
 stow ohmyposh
 stow home
 stow atuin
+stow wezterm
 ```
 
 ## The installation scripts
