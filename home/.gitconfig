@@ -45,6 +45,7 @@
 [core]
   editor = nvim
   pager = delta
+	excludesfile = /Users/mathieu.durand/.gitignore_global
 [delta]
   features = side-by-side unobtrusive-line-numbers
   syntax-theme = OneHalfDark

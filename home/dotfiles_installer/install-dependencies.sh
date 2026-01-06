@@ -46,6 +46,9 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   brew install gnupg
   brew install --cask gpg-suite
 
+  #Yubikey CLI
+  brew install ykman 
+
 else
 
   sudo apt-get install zsh fonts-firacode htop ripgrep fd-find libz-dev bashtop vim emacs rename ulauncher httpie ncdu xclip xsel

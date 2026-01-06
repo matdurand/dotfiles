@@ -181,6 +181,9 @@ alias kc='kubectl'
 alias kctx='kubectx'
 alias kns='kubens'
 
+alias got='git'
+alias gt='git'
+
 # ---- Zoxide (better cd) ----
 _ZO_RESOLVE_SYMLINKS=1
 eval "$(zoxide init zsh)"
@@ -312,3 +315,5 @@ fi
 
 #For zsh profiling
 #zprof > ~/.zprof.log 
+
+export PATH="$HOME/.local/bin:$PATH"
